@@ -59,7 +59,7 @@ function App() {
 
   return (
       <>
-        {(directorsLoaded && moviesLoaded) ? <Dashboard/> : loader}
+        {(directorsLoaded && moviesLoaded) ? <Dashboard directors={[]}/> : loader}
         <GlobalStyles/>
       </>
   );

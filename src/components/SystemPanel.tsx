@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
-import {Col, Row} from "../Layout";
+import { Col, Row } from "../Layout";
+import { useDispatch } from "react-redux";
+import AddPanelReducer from "../redux/AddPanelReducer";
 
 const Wrapper = styled(Col)`
     background: #517217;
@@ -11,11 +13,14 @@ const Wrapper = styled(Col)`
 const ActionButton = styled.button`
     border: none;
     cursor: pointer;
-    order: none;
-    cursor: pointer;
     padding: 11px 13px;
     border-radius: 50%;
     margin-bottom: 10px;
+    transition: all .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+    :hover {
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    }
     :focus, :hover {
 		outline: none;
 	}
@@ -31,6 +36,14 @@ const IconContainer = styled(Row)`
 `;
 
 const SystemPanel: React.FC = () => {
+    const [panelState, setPanelState] = useState(false);
+
+    const togglePanel = () => {
+        dispatch({type: AddPanelReducer.actions.PANEL_CHANGE, newState: !panelState});
+        setPanelState(!panelState);
+    };
+
+    const dispatch = useDispatch();
 
     return (
         <Wrapper>
@@ -43,7 +56,7 @@ const SystemPanel: React.FC = () => {
                     </SVG>
                 </IconContainer>
             </ActionButton>
-            <ActionButton>
+            <ActionButton onClick={togglePanel}>
                 <IconContainer>
                     <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
                          role="img" xmlns="http://www.w3.org/2000/svg"

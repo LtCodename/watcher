@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useStore } from "react-redux";
+import React from 'react';
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import Director from "./Director";
 import Movies from "./Movies";
 import SystemPanel from "./SystemPanel";
+import AddPanel from "./AddPanel";
 
 const DashboardWrapper = styled(Col)`
     padding: 10px;
@@ -35,52 +36,80 @@ const MoviesWrapper = styled(Row)<{ stateDirector: string, director: string }>`
     display: ${props => (props.director === props.stateDirector ? 'block' : 'none')};
 `;
 
-function Dashboard() {
-    const store = useStore();
-    const storeState = store.getState();
-    const directors = storeState.directors;
+interface MyProps {
+    directors: [];
+    addPanelState?: boolean;
+}
 
-    const [currentDirector, setCurrentDirector] = useState('');
+interface MyState {
+    currentDirector: string;
+    panelOpened: boolean;
+}
 
-    const onDirector = (name: string) => {
-        if (name === currentDirector)
+class Dashboard extends React.Component <MyProps, MyState>  {
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            currentDirector: '',
+            panelOpened: false
+        };
+    }
+
+    onDirector = (name: string) => {
+        if (name === this.state.currentDirector)
         {
-            setCurrentDirector('');
+            this.setState({
+                currentDirector: ''
+            });
         } else {
-            setCurrentDirector(name);
+            this.setState({
+                currentDirector: name
+            });
         }
     };
 
-    const directorsNode = directors.map((elem: any, index: any) => {
-        return (
-            <DirectorAndMovies key={index}>
-                <DirectorButton
-                    type={'button'}
-                    onClick={() => onDirector(elem.name)}>
-                    <Director directorData={elem}/>
-                </DirectorButton>
-                <MoviesWrapper
-                    director={elem.name}
-                    stateDirector={currentDirector}>
-                    <Movies directorId={elem.id}/>
-                </MoviesWrapper>
-            </DirectorAndMovies>
-        )
-    });
+    render() {
+        const directorsNode = this.props.directors.map((elem: any, index: any) => {
+            return (
+                <DirectorAndMovies key={index}>
+                    <DirectorButton
+                        type={'button'}
+                        onClick={() => this.onDirector(elem.name)}>
+                        <Director directorData={elem}/>
+                    </DirectorButton>
+                    <MoviesWrapper
+                        director={elem.name}
+                        stateDirector={this.state.currentDirector}>
+                        <Movies directorId={elem.id}/>
+                    </MoviesWrapper>
+                </DirectorAndMovies>
+            )
+        });
 
-    return (
-        <MainRow>
-            <DashboardWrapper>
-                <DirectorsRow>
-                    {directorsNode}
-                </DirectorsRow>
-            </DashboardWrapper>
-            <SystemPanel>System</SystemPanel>
-            {/*<AddDirectorSection></AddDirectorSection>*/}
-            {/*<AddMovieSection></AddMovieSection>*/}
-            {/*<LoginSection></LoginSection>*/}
-        </MainRow>
-    );
+        return (
+            <MainRow>
+                <DashboardWrapper>
+                    <DirectorsRow>
+                        {directorsNode}
+                    </DirectorsRow>
+                </DashboardWrapper>
+                <Row>
+                    {this.props.addPanelState ? <AddPanel/> : ''}
+                    <SystemPanel/>
+                </Row>
+            </MainRow>
+        );
+    }
 }
 
-export default Dashboard;
+const stateToProps = (state: any = {}) => {
+    return {
+        addPanelState: state.addPanelState,
+        directors: state.directors,
+    }
+};
+
+const DashboardConnected = connect(stateToProps, null)(Dashboard);
+
+export default DashboardConnected;
