@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { Col } from "../Layout";
 import axios from 'axios';
@@ -6,17 +6,22 @@ import { OMDbApiKey } from "../App";
 
 const MovieWrapper = styled.div`
     margin-right: 10px;
+    margin-bottom: 10px;
     background: #15202b;
     width: 200px;
     text-align: center;
-    margin-bottom: 10px;
+    transition: all .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+    :hover {
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    }
 `;
 
 const MovieButton = styled.button<{ watched: boolean }>`
     border: none;
     width: 100%;
     height: 100%;
-    padding: 20px;
+    padding: 10px;
     background: ${props => (props.watched ? '#527318' : '#d63447')};
     font-weight: 800;
     font-size: 25px;
@@ -30,7 +35,7 @@ const MovieButton = styled.button<{ watched: boolean }>`
 
 const Name = styled.span<{ opened: boolean }>`
     background: inherit;
-    color: inherit;
+    color: #fff9de;
     font-weight: 800;
     font-size: 25px;
     margin-bottom: ${props => (props.opened ? '10px' : '0')};
@@ -51,6 +56,17 @@ const Information = styled(Col)<{ opened: boolean }>`
 
 const Info = styled.span`
     background: #FFFFFF;
+`;
+
+const InfoTitle = styled.span`
+    background: #FFFFFF;
+    color: #14202a;
+    font-size: 15px;
+    font-weight: 600;
+`;
+
+const InfoBody= styled.span`
+    background: #FFFFFF;
     color: #14202a;
     font-size: 15px;
     font-weight: 300;
@@ -59,6 +75,7 @@ const Info = styled.span`
 interface IMovie {
     movieData: any;
 }
+
 interface IMovieData {
     year?: string;
     awards?: string;
@@ -111,10 +128,22 @@ const Movie: React.FC<IMovie> = (
                     <Name opened={opened}>{movieData.name}</Name>
                     <Information
                         opened={opened}>
-                        <Info>{`Year: ${fullData.year}`}</Info>
-                        <Info>{`Awards: ${fullData.awards}`}</Info>
-                        <Info>{`Metsacore: ${fullData.metascore}`}</Info>
-                        <Info>{`IMDB Rating: ${fullData.imdbRating}`}</Info>
+                        <Info>
+                            <InfoTitle>Year: </InfoTitle>
+                            <InfoBody>{fullData.year}</InfoBody>
+                        </Info>
+                        <Info>
+                            <InfoTitle>Awards: </InfoTitle>
+                            <InfoBody>{fullData.awards}</InfoBody>
+                        </Info>
+                        <Info>
+                            <InfoTitle>Metascore: </InfoTitle>
+                            <InfoBody>{fullData.metascore}</InfoBody>
+                        </Info>
+                        <Info>
+                            <InfoTitle>IMDB Rating: </InfoTitle>
+                            <InfoBody>{fullData.imdbRating}</InfoBody>
+                        </Info>
                     </Information>
                 </InformationColumn>
             </MovieButton>

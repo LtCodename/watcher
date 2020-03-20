@@ -22,7 +22,7 @@ const spin = keyframes`
 `;
 
 const Loader = styled.div`
-    border: 16px solid #15202b;/* Bigger Part */
+    border: 16px solid rgba(0, 121, 196, 1);/* Bigger Part */
     border-top: 16px solid #FFFFFF;/* Smaller part */
     border-radius: 50%;
     width: 120px;

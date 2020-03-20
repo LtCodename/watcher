@@ -52,7 +52,7 @@ function Dashboard() {
                 <DirectorButton
                     type={'button'}
                     onClick={() => onDirector(elem.name)}>
-                    <Director directorName={elem.name}/>
+                    <Director directorData={elem}/>
                 </DirectorButton>
                 <MoviesWrapper
                     director={elem.name}
