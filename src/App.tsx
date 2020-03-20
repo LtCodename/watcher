@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import fire from "./fire";
-import { createGlobalStyle}  from "styled-components";
-import {useDispatch, useStore} from "react-redux";
+import { createGlobalStyle }  from "styled-components";
+import { useDispatch } from "react-redux";
 import DirectorsReducer from "./redux/DirectorsReducer";
 import MoviesReducer from "./redux/MoviesReducer";
+import Dashboard from "./components/Dashboard";
+import Preloader from "./components/Preloader";
 
-const OMDbApiKey: string = '36827e98';
+export const OMDbApiKey: string = '36827e98';
 
 const GlobalStyles = createGlobalStyle`
   * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-  }
-  
-  body {
+    font-size: 16px;
+    background: #FFFFFF;
   }
 `;
 
@@ -53,40 +53,15 @@ function App() {
     });
   };
 
-  const store = useStore();
-  const storeState = store.getState();
-  const directors = storeState.directors;
-
-  // async function getData() {
-  //   try {
-  //     const { data } = await axios.get(`http://www.omdbapi.com/?t=goodfellas&y=1990&plot=full&apikey=${OMDbApiKey}`, {
-  //     });
-  //
-  //     console.log(data);
-  //   } catch (e) {
-  //   }
-  // }
-
-  console.log(directors);
-
-  const content = (
-      <>
-        <span>Content</span>
-        <GlobalStyles/>
-      </>
-  );
-
   const loader = (
-      <>
-        <span>Loading...</span>
-      </>
+      <Preloader/>
   );
 
   return (
-    <>
-      {(directorsLoaded && moviesLoaded) ? content : loader}
-      {/*<button type='button' onClick={getData}>Goodfellas</button>*/}
-    </>
+      <>
+        {(directorsLoaded && moviesLoaded) ? <Dashboard/> : loader}
+        <GlobalStyles/>
+      </>
   );
 }
 
