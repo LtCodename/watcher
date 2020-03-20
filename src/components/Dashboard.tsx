@@ -4,13 +4,14 @@ import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import Director from "./Director";
 import Movies from "./Movies";
+import SystemPanel from "./SystemPanel";
 
 const DashboardWrapper = styled(Col)`
     padding: 10px;
 `;
 
 const DirectorsRow = styled(Row)`
-
+    flex-wrap: wrap;
 `;
 
 const DirectorButton = styled.button`
@@ -23,6 +24,10 @@ const DirectorButton = styled.button`
 
 const DirectorAndMovies = styled(Col)`
     align-items: center;
+`;
+
+const MainRow = styled(Row)`
+    justify-content: space-between;
 `;
 
 const MoviesWrapper = styled(Row)<{ stateDirector: string, director: string }>`
@@ -64,11 +69,17 @@ function Dashboard() {
     });
 
     return (
-        <DashboardWrapper>
-            <DirectorsRow>
-                {directorsNode}
-            </DirectorsRow>
-        </DashboardWrapper>
+        <MainRow>
+            <DashboardWrapper>
+                <DirectorsRow>
+                    {directorsNode}
+                </DirectorsRow>
+            </DashboardWrapper>
+            <SystemPanel>System</SystemPanel>
+            {/*<AddDirectorSection></AddDirectorSection>*/}
+            {/*<AddMovieSection></AddMovieSection>*/}
+            {/*<LoginSection></LoginSection>*/}
+        </MainRow>
     );
 }
 
