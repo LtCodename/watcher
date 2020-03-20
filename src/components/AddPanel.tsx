@@ -1,11 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import { Col } from "../Layout";
+import AdaptiveTextarea from "./AdaptiveTextarea";
+import fire from "../fire";
 
 const Wrapper = styled(Col)`
     background: #d63447;
     padding: 10px;
     height: 100vh;
+    width: 200px;
+`;
+
+const DirectorColumn = styled(Col)`
+    background: #d63447;
 `;
 
 const ActionButton = styled.button`
@@ -27,14 +34,48 @@ const ActionButton = styled.button`
 `;
 
 const AddPanel: React.FC = () => {
-    return (
-        <Wrapper>
-            <ActionButton>
+    const [addDirectorMode, setAddDirectorMode] = useState(false);
+
+    const onAddDirector = () => {
+        setAddDirectorMode(!addDirectorMode);
+    };
+
+    const addMenu = (
+        <>
+            <ActionButton onClick={onAddDirector} type={'button'}>
                 Add Director
             </ActionButton>
-            <ActionButton>
+            <ActionButton type={'button'}>
                 Add Movie
             </ActionButton>
+        </>
+    );
+
+    let directorReference: any;
+
+    const SubmitDirector = () => {
+        if (directorReference.state.directorName === '') {
+            setAddDirectorMode(!addDirectorMode);
+            return;
+        } else {
+            fire.firestore().collection('directors').add({
+                name: directorReference.state.directorName
+            }).then(() => {
+                setAddDirectorMode(!addDirectorMode);
+            });
+        }
+    };
+
+    const addDirector = (
+        <DirectorColumn>
+            <AdaptiveTextarea ref={c => (directorReference = c)}/>
+            <ActionButton type={'button'} onClick={SubmitDirector}>Submit</ActionButton>
+        </DirectorColumn>
+    );
+
+    return (
+        <Wrapper>
+            {addDirectorMode ? addDirector : addMenu}
         </Wrapper>
     );
 };

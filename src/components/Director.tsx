@@ -45,7 +45,7 @@ const Director: React.FC<IMovie> = (
 
     const moviesByDirector = movies.filter((elem:any) => elem.director === directorData.id);
     const watched = moviesByDirector.filter((elem:any) => elem.watched);
-    const percentage = (watched.length * 100) / moviesByDirector.length;
+    const percentage = ((watched.length * 100) / moviesByDirector.length) || 0;
 
     return (
         <DirectorWrapper>
