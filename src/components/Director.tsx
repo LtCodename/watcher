@@ -38,7 +38,6 @@ interface IMovie {
 const Director: React.FC<IMovie> = (
     { directorData },
 ) => {
-
     const store = useStore();
     const storeState = store.getState();
     const movies = storeState.movies;

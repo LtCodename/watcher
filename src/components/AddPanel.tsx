@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { Col } from "../Layout";
 import AdaptiveTextarea from "./AdaptiveTextarea";
 import fire from "../fire";
+import { useStore } from "react-redux";
+import axios from "axios";
+import { OMDbApiKey } from "../App";
+import SearchResults from "./SearchResults";
 
 const Wrapper = styled(Col)`
     background: #d63447;
@@ -13,6 +17,10 @@ const Wrapper = styled(Col)`
 
 const DirectorColumn = styled(Col)`
     background: #d63447;
+`;
+
+const Select = styled.select`
+    margin-bottom: 10px;
 `;
 
 const ActionButton = styled.button`
@@ -33,11 +41,26 @@ const ActionButton = styled.button`
 	}
 `;
 
+interface IResponse {
+    Search: [];
+}
+
 const AddPanel: React.FC = () => {
+    const store = useStore();
+    const storeState = store.getState();
+    const directors = storeState.directors;
+
     const [addDirectorMode, setAddDirectorMode] = useState(false);
+    const [addMovieMode, setAddMovieMode] = useState(false);
+    const [directorId, setDirectorId] = useState('');
+    const [foundMovies, setFoundMovies] = useState([]);
 
     const onAddDirector = () => {
         setAddDirectorMode(!addDirectorMode);
+    };
+
+    const onAddMovie = () => {
+        setAddMovieMode(!addMovieMode);
     };
 
     const addMenu = (
@@ -45,26 +68,56 @@ const AddPanel: React.FC = () => {
             <ActionButton onClick={onAddDirector} type={'button'}>
                 Add Director
             </ActionButton>
-            <ActionButton type={'button'}>
+            <ActionButton onClick={onAddMovie}  type={'button'}>
                 Add Movie
             </ActionButton>
         </>
     );
 
     let directorReference: any;
+    let movieReference: any;
 
     const SubmitDirector = () => {
-        if (directorReference.state.directorName === '') {
+        if (directorReference.state.textData === '') {
             setAddDirectorMode(!addDirectorMode);
             return;
         } else {
             fire.firestore().collection('directors').add({
-                name: directorReference.state.directorName
+                name: directorReference.state.textData
             }).then(() => {
                 setAddDirectorMode(!addDirectorMode);
             });
         }
     };
+
+    const SearchMovie = () => {
+        if (movieReference.state.textData === '') {
+            setAddMovieMode(!addMovieMode);
+            return;
+        } else if (!directorId.length) {
+            console.log('Pick a director please.');
+            return;
+        } else {
+            search().then((response: IResponse) => {
+                setFoundMovies(response['Search']);
+                //console.log(response['Search']);
+            });
+        }
+    };
+
+    async function search(): Promise<IResponse> {
+        let fromServer:IResponse;
+        try {
+            const { data } = await axios.get(
+                `http://www.omdbapi.com/?s=${(movieReference.state.textData).toLowerCase()}&type=movie&apikey=${OMDbApiKey}`, {
+                });
+            fromServer = data;
+            //console.log(data);
+        } catch (e) {
+            throw new Error('Something went wrong!');
+        }
+        return fromServer;
+    }
 
     const addDirector = (
         <DirectorColumn>
@@ -73,9 +126,38 @@ const AddPanel: React.FC = () => {
         </DirectorColumn>
     );
 
+    const selectValuesChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setDirectorId(event.target.value);
+    };
+
+    const directorsOptions = [{name: "Not selected", value: null}, ...directors].map((director, index) => {
+        return (
+            <option key={index} value={director.id}>{director.name}</option>
+        );
+    });
+
+    const movies = (
+        <SearchResults searchData={foundMovies} director={directorId}/>
+    );
+
+    const addMovie = (
+        <DirectorColumn>
+            <AdaptiveTextarea ref={c => (movieReference = c)}/>
+            <Select
+                onChange={selectValuesChange}
+                value={directorId}>
+                {directorsOptions}
+            </Select>
+            <ActionButton type={'button'} onClick={SearchMovie}>Search IMDB</ActionButton>
+            {(foundMovies && foundMovies.length) ? movies : ''}
+        </DirectorColumn>
+    );
+
     return (
         <Wrapper>
-            {addDirectorMode ? addDirector : addMenu}
+            {(!addDirectorMode && !addMovieMode) ? addMenu : ''}
+            {addDirectorMode ? addDirector : ''}
+            {addMovieMode ? addMovie : ''}
         </Wrapper>
     );
 };

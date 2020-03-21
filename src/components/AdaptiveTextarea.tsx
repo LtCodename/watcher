@@ -14,13 +14,14 @@ const Textarea = styled.textarea`
     outline: none;
     color: #fff9de;
     font-weight: 600;
+    margin-bottom: 10px;
     ::-webkit-input-placeholder {
       color: #fff9de;
     }
 `;
 
 type TweetState = {
-    directorName: ''
+    textData: ''
 }
 
 export class AdaptiveTextarea extends Component<{}, TweetState> {
@@ -28,7 +29,7 @@ export class AdaptiveTextarea extends Component<{}, TweetState> {
 
     componentWillMount() {
         this.setState({
-            directorName: ''
+            textData: ''
         });
     }
 
@@ -39,7 +40,7 @@ export class AdaptiveTextarea extends Component<{}, TweetState> {
 
     inputValuesChange = (event: { target: { value: any; }; }) => {
         this.setState({
-            directorName: event.target.value
+            textData: event.target.value
         });
     };
 
@@ -48,7 +49,7 @@ export class AdaptiveTextarea extends Component<{}, TweetState> {
             <Textarea
                 ref={c => (this.textarea = c)}
                 placeholder={'Enter Name'}
-                value={this.state.directorName}
+                value={this.state.textData}
                 onChange={this.inputValuesChange}
                 required>
             </Textarea>
