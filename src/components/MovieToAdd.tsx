@@ -45,6 +45,7 @@ const MovieToAdd: React.FC<IProps> = (
     const store = useStore();
     const storeState = store.getState();
     const directors = storeState.directors;
+    const movies = storeState.movies;
 
     const initialDirector: any = '';
     const [process, setProcess] = useState('unset');
@@ -55,21 +56,26 @@ const MovieToAdd: React.FC<IProps> = (
     },[movieData]);
 
     const onMovieClick = () => {
-        //console.log(directorInState);
+        const directorFound = directors.find((elem: any) => elem.name === directorInState);
 
-        const found = directors.find((elem: any) => elem.name === directorInState);
-        //console.log(found);
-
-        if (!found) {
+        if (!directorFound) {
             setProcess('Director Not Found');
             setTimeout(() => { setProcess('unset'); }, 3000);
             return;
         }
 
-        if (found) {
+        const movieFound = movies.find((elem: any) => elem.name === movieData['Title']);
+
+        if (movieFound) {
+            setProcess('Movie Exists');
+            setTimeout(() => { setProcess('unset'); }, 3000);
+            return;
+        }
+
+        if (directorFound && !movieFound) {
             setProcess('Progress...');
             fire.firestore().collection('movies').add({
-                director: found.id,
+                director: directorFound.id,
                 name: movieData['Title'],
                 watched: false,
                 year: parseInt(movieData['Year'])
