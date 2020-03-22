@@ -76,7 +76,7 @@ class Dashboard extends React.Component <MyProps, MyState>  {
                     <DirectorButton
                         type={'button'}
                         onClick={() => this.onDirector(elem.name)}>
-                        <Director directorData={elem}/>
+                        <Director directorData={elem} movies={[]}/>
                     </DirectorButton>
                     <MoviesWrapper
                         director={elem.name}

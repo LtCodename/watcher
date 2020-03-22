@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { Col } from "../Layout";
-import {useStore} from "react-redux";
+import { connect } from "react-redux";
 
 const DirectorWrapper = styled(Col)`
     padding: 10px;
@@ -31,28 +31,47 @@ const Percent = styled.span`
     margin-top: 5px;
 `;
 
-interface IMovie {
+interface MyProps {
     directorData: any;
+    movies: any;
 }
 
-const Director: React.FC<IMovie> = (
-    { directorData },
-) => {
-    const store = useStore();
-    const storeState = store.getState();
-    const movies = storeState.movies;
+interface MyState {
+}
 
-    const moviesByDirector = movies.filter((elem:any) => elem.director === directorData.id);
-    const watched = moviesByDirector.filter((elem:any) => elem.watched);
-    const percentage = ((watched.length * 100) / moviesByDirector.length) || 0;
-    const percentageRounded = Number(Math.round(percentage));
 
-    return (
-        <DirectorWrapper>
-            {directorData.name}
-            <Percent>{`${percentageRounded}%`}</Percent>
-        </DirectorWrapper>
-    );
+class Director extends React.Component <MyProps, MyState>  {
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+        };
+    }
+
+
+    render () {
+        const moviesByDirector = this.props.movies.filter((elem:any) => {
+            return elem.director === this.props.directorData.id;
+        });
+        const watched = moviesByDirector.filter((elem:any) => elem.watched);
+        const percentage = ((watched.length * 100) / moviesByDirector.length) || 0;
+        const percentageRounded = Number(Math.round(percentage));
+
+        return (
+            <DirectorWrapper>
+                {this.props.directorData.name}
+                <Percent>{`${percentageRounded}%`}</Percent>
+            </DirectorWrapper>
+        );
+    }
+}
+
+const stateToProps = (state: any = {}) => {
+    return {
+        movies: state.movies,
+    }
 };
 
-export default Director;
+const DirectorConnected = connect(stateToProps, null)(Director);
+
+export default DirectorConnected;
