@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import { Col } from "../Layout";
+import { Col, Row } from "../Layout";
 import axios from 'axios';
 import { OMDbApiKey } from "../App";
 import fire from "../fire";
@@ -81,7 +81,7 @@ const IconButton = styled.button<{ watched: boolean }>`
     background: #d63447;
     outline: none;
     border: none;
-    margin-bottom: 5px;
+    margin: 0 2.5px 5px 2.5px;
     display: ${props => (props.watched ? 'none' : 'block')};
     :focus, :hover {
         outline: none;
@@ -91,6 +91,10 @@ const IconButton = styled.button<{ watched: boolean }>`
 const SVG = styled.svg`
     fill: #fff9de;
     height: 20px;
+    background: #d63447;
+`;
+
+const ConfirmRow = styled(Row)`
     background: #d63447;
 `;
 
@@ -129,6 +133,7 @@ const Movie: React.FC<IMovie> = (
     const [opened, setOpened] = useState(false);
     const [fullData, setFullData] = useState(fullDataInitialState);
     const [movieDataInState, setMovieDataInState] = useState(movieDataInitialState);
+    const [confirmMode, setComfirmMode] = useState(false);
 
     useEffect(() => {
         setMovieDataInState(movieData);
@@ -161,7 +166,7 @@ const Movie: React.FC<IMovie> = (
         return fromServer;
     }
 
-    const onWatch = () => {
+    const onConfirmWatched = () => {
         let newMovieData = movieDataInState;
         newMovieData.watched = true;
         fire.firestore().collection('movies').doc(movieDataInState.id).update({
@@ -173,6 +178,43 @@ const Movie: React.FC<IMovie> = (
             console.log(error.message);
         });
     };
+
+    const onWatched = () => {
+        setComfirmMode(true);
+    };
+
+    const onAbort = () => {
+        setComfirmMode(false);
+    };
+
+    const watchedButton = (
+        <IconButton watched={movieDataInState.watched} onClick={onWatched}>
+            <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
+                 role="img"
+                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"/>
+            </SVG>
+        </IconButton>
+    );
+
+    const confirmPanel = (
+        <ConfirmRow>
+            <IconButton watched={movieDataInState.watched} onClick={onConfirmWatched}>
+                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"/>
+                </SVG>
+            </IconButton>
+            <IconButton watched={movieDataInState.watched} onClick={onAbort}>
+                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ban"
+                     role="img" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512">
+                    <path d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"/>
+                </SVG>
+            </IconButton>
+        </ConfirmRow>
+    );
 
     return (
         <MovieWrapper watched={movieDataInState.watched}>
@@ -203,13 +245,7 @@ const Movie: React.FC<IMovie> = (
                     </Information>
                 </InformationColumn>
             </MovieButton>
-            <IconButton watched={movieDataInState.watched} onClick={onWatch}>
-                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
-                     role="img"
-                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"/>
-                </SVG>
-            </IconButton>
+            {confirmMode ? confirmPanel : watchedButton}
         </MovieWrapper>
     );
 };
