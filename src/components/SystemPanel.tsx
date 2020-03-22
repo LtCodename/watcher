@@ -7,8 +7,6 @@ import AddPanelReducer from "../redux/AddPanelReducer";
 const Wrapper = styled(Col)`
     background: #517217;
     padding: 10px;
-    height: 100vh;
-    overflow: auto;
 `;
 
 const ActionButton = styled.button`

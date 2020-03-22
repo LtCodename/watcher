@@ -29,6 +29,7 @@ const DirectorAndMovies = styled(Col)`
 
 const MainRow = styled(Row)`
     justify-content: space-between;
+    min-height: 100vh;
 `;
 
 const MoviesWrapper = styled(Row)<{ stateDirector: string, director: string }>`

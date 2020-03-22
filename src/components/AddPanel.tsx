@@ -10,8 +10,6 @@ import SearchResults from "./SearchResults";
 const Wrapper = styled(Col)`
     background: #d63447;
     padding: 10px;
-    height: 100vh;
-    overflow: auto;
     width: 200px;
 `;
 

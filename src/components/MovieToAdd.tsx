@@ -6,7 +6,8 @@ import { Col } from "../Layout";
 import axios from "axios";
 import { OMDbApiKey } from "../App";
 import { IMovieData } from "./Movie";
-import {useStore} from "react-redux";
+import { useDispatch, useStore } from "react-redux";
+import SelectedDirectorReducer from "../redux/SelectedDirectorReducer";
 
 const MovieButton = styled.button`
     border: none;
@@ -41,6 +42,7 @@ const MovieToAdd: React.FC<IProps> = (
     const store = useStore();
     const storeState = store.getState();
     const selectedDirector = storeState.selectedDirector;
+    const dispatch = useDispatch();
 
     const initialDirector: any = '';
     const [process, setProcess] = useState('unset');
@@ -64,6 +66,7 @@ const MovieToAdd: React.FC<IProps> = (
             year: parseInt(movieData['Year'])
         }).then(() => {
             setProcess('Added!');
+            dispatch({type: SelectedDirectorReducer.actions.DIRECTOR_SET, selectedDirector: ''});
         });
     };
 
