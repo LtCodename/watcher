@@ -81,7 +81,7 @@ class Dashboard extends React.Component <MyProps, MyState>  {
                     <MoviesWrapper
                         director={elem.name}
                         stateDirector={this.state.currentDirector}>
-                        <Movies directorId={elem.id}/>
+                        <Movies directorId={elem.id} movies={[]}/>
                     </MoviesWrapper>
                 </DirectorAndMovies>
             )

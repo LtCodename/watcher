@@ -1,38 +1,55 @@
 import React from 'react';
-import { useStore } from "react-redux";
+import { connect } from "react-redux";
 import { Col } from "../Layout";
 import Movie from "./Movie";
-
-interface IMovies {
-    directorId: string;
-}
 
 interface IMovie {
     director: string;
 }
 
-const Movies: React.FC<IMovies> = (
-    { directorId },
-) => {
-    const store = useStore();
-    const storeState = store.getState();
-    const movies = storeState.movies;
+interface MyProps {
+    directorId: string;
+    movies: [];
+}
 
-    const moviesNode = movies.filter((movie:IMovie) => movie.director === directorId)
-        .map((elem: any, index: any) => {
-        return (
-            <div key={index}>
-                <Movie
-                    movieData={elem}/>
-            </div>
-        )
-    });
+interface MyState {
+}
 
-    return (
-        <Col>
-            {moviesNode}
-        </Col>
-    );
+class Movies extends React.Component <MyProps, MyState>  {
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            currentDirector: '',
+            panelOpened: false
+        };
+    }
+
+     render() {
+         const moviesNode = this.props.movies.filter((movie:IMovie) => movie.director === this.props.directorId)
+             .map((elem: any, index: any) => {
+                 return (
+                     <div key={index}>
+                         <Movie
+                             movieData={elem}/>
+                     </div>
+                 )
+             });
+
+         return (
+             <Col>
+                 {moviesNode}
+             </Col>
+         );
+     }
+}
+
+const stateToProps = (state: any = {}) => {
+    return {
+        movies: state.movies,
+    }
 };
 
-export default Movies;
+const MoviesConnected = connect(stateToProps, null)(Movies);
+
+export default MoviesConnected;

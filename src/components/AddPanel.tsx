@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Col } from "../Layout";
 import AdaptiveTextarea from "./AdaptiveTextarea";
 import fire from "../fire";
-import { useStore } from "react-redux";
 import axios from "axios";
 import { OMDbApiKey } from "../App";
 import SearchResults from "./SearchResults";
@@ -12,15 +11,12 @@ const Wrapper = styled(Col)`
     background: #d63447;
     padding: 10px;
     height: 100vh;
+    overflow: auto;
     width: 200px;
 `;
 
 const DirectorColumn = styled(Col)`
     background: #d63447;
-`;
-
-const Select = styled.select`
-    margin-bottom: 10px;
 `;
 
 const ActionButton = styled.button`
@@ -46,13 +42,8 @@ interface IResponse {
 }
 
 const AddPanel: React.FC = () => {
-    const store = useStore();
-    const storeState = store.getState();
-    const directors = storeState.directors;
-
     const [addDirectorMode, setAddDirectorMode] = useState(false);
     const [addMovieMode, setAddMovieMode] = useState(false);
-    const [directorId, setDirectorId] = useState('');
     const [foundMovies, setFoundMovies] = useState([]);
 
     const onAddDirector = () => {
@@ -91,11 +82,9 @@ const AddPanel: React.FC = () => {
     };
 
     const SearchMovie = () => {
+        setFoundMovies([]);
         if (movieReference.state.textData === '') {
             setAddMovieMode(!addMovieMode);
-            return;
-        } else if (!directorId.length) {
-            console.log('Pick a director please.');
             return;
         } else {
             search().then((response: IResponse) => {
@@ -126,28 +115,13 @@ const AddPanel: React.FC = () => {
         </DirectorColumn>
     );
 
-    const selectValuesChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setDirectorId(event.target.value);
-    };
-
-    const directorsOptions = [{name: "Not selected", value: null}, ...directors].map((director, index) => {
-        return (
-            <option key={index} value={director.id}>{director.name}</option>
-        );
-    });
-
     const movies = (
-        <SearchResults searchData={foundMovies} director={directorId}/>
+        <SearchResults searchData={foundMovies}/>
     );
 
     const addMovie = (
         <DirectorColumn>
             <AdaptiveTextarea ref={c => (movieReference = c)}/>
-            <Select
-                onChange={selectValuesChange}
-                value={directorId}>
-                {directorsOptions}
-            </Select>
             <ActionButton type={'button'} onClick={SearchMovie}>Search IMDB</ActionButton>
             {(foundMovies && foundMovies.length) ? movies : ''}
         </DirectorColumn>

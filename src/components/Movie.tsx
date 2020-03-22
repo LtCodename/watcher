@@ -76,9 +76,10 @@ interface IMovie {
     movieData: any;
 }
 
-interface IMovieData {
+export interface IMovieData {
     year?: string;
     awards?: string;
+    director?: string;
     metascore?: string;
     imdbRating?: string;
 }
