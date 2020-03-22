@@ -6,8 +6,7 @@ import { Col } from "../Layout";
 import axios from "axios";
 import { OMDbApiKey } from "../App";
 import { IMovieData } from "./Movie";
-import { useDispatch, useStore } from "react-redux";
-import SelectedDirectorReducer from "../redux/SelectedDirectorReducer";
+import { useStore } from "react-redux";
 
 const MovieButton = styled.button`
     border: none;
@@ -26,6 +25,10 @@ const InfoSpan = styled.span`
     font-weight: 700;
 `;
 
+const MovieDetail = styled.span`
+    min-height: 18px;
+`;
+
 interface IProps {
     movieData: IData,
     director?: string
@@ -41,8 +44,7 @@ const MovieToAdd: React.FC<IProps> = (
 ) => {
     const store = useStore();
     const storeState = store.getState();
-    const selectedDirector = storeState.selectedDirector;
-    const dispatch = useDispatch();
+    const directors = storeState.directors;
 
     const initialDirector: any = '';
     const [process, setProcess] = useState('unset');
@@ -53,26 +55,34 @@ const MovieToAdd: React.FC<IProps> = (
     },[movieData]);
 
     const onMovieClick = () => {
-        if (!selectedDirector.length) {
-            setProcess('Select Director');
+        //console.log(directorInState);
+
+        const found = directors.find((elem: any) => elem.name === directorInState);
+        //console.log(found);
+
+        if (!found) {
+            setProcess('Director Not Found');
             setTimeout(() => { setProcess('unset'); }, 3000);
             return;
         }
-        setProcess('Progress...');
-        fire.firestore().collection('movies').add({
-            director: selectedDirector,
-            name: movieData['Title'],
-            watched: false,
-            year: parseInt(movieData['Year'])
-        }).then(() => {
-            setProcess('Added!');
-            dispatch({type: SelectedDirectorReducer.actions.DIRECTOR_SET, selectedDirector: ''});
-        });
+
+        if (found) {
+            setProcess('Progress...');
+            fire.firestore().collection('movies').add({
+                director: found.id,
+                name: movieData['Title'],
+                watched: false,
+                year: parseInt(movieData['Year'])
+            }).then(() => {
+                setProcess('Added!');
+            });
+        }
     };
 
     const getAdditionalData = () => {
         getData().then((response:IMovieData) => {
             setDirectorInState(response.director);
+            //console.log(response.director);
         }).catch((e) => {
             console.log(e);
         });
@@ -96,9 +106,9 @@ const MovieToAdd: React.FC<IProps> = (
     return (
         <MovieButton onClick={onMovieClick}>
             <Col>
-                <span>{process !== 'unset' ? <InfoSpan>{process}</InfoSpan> : movieData['Title']}</span>
-                <span>{movieData['Year']}</span>
-                <span>{directorInState}</span>
+                <MovieDetail>{process !== 'unset' ? <InfoSpan>{process}</InfoSpan> : movieData['Title']}</MovieDetail>
+                <MovieDetail>{movieData['Year']}</MovieDetail>
+                <MovieDetail>{directorInState ? directorInState : 'Searching...'}</MovieDetail>
             </Col>
         </MovieButton>
     );
