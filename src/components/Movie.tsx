@@ -5,10 +5,11 @@ import axios from 'axios';
 import { OMDbApiKey } from "../App";
 import fire from "../fire";
 
-const MovieWrapper = styled(Col)<{ watched: boolean }>`
+const MovieWrapper = styled(Col)<{ watched: boolean, bookmarked: boolean }>`
     margin-right: 10px;
     margin-bottom: 10px;
     background: #15202b;
+    border: ${props => ((!props.watched && props.bookmarked) ? '10px solid #84142d' : '0px solid #84142d')};
     width: 200px;
     align-items: center;
     text-align: center;
@@ -18,6 +19,7 @@ const MovieWrapper = styled(Col)<{ watched: boolean }>`
     :hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     }
+    
 `;
 
 const MovieButton = styled.button<{ watched: boolean }>`
@@ -34,6 +36,31 @@ const MovieButton = styled.button<{ watched: boolean }>`
     :focus, :hover {
 		outline: none;
 	}
+`;
+
+const BookmarkButton = styled.button<{ watched: boolean }>`
+    border: none;
+    cursor: pointer;
+    outline: none;
+    top: 0;
+    right: 0;
+    background: ${props => (props.watched ? '#527318' : '#d63447')};
+    :focus, :hover {
+		outline: none;
+	}
+`;
+
+const BookmarkIcon = styled.svg<{ watched: boolean }>`
+    fill: #fff9de;
+    height: 20px;
+    background: ${props => (props.watched ? '#527318' : '#d63447')};
+`;
+
+const SystemRow = styled(Row)<{ watched: boolean }>`
+    background: ${props => (props.watched ? '#527318' : '#d63447')};
+    align-items: center;
+    display: ${props => (props.watched ? 'none' : 'flex')};
+    padding-bottom: 2px;
 `;
 
 const Name = styled.span<{ opened: boolean }>`
@@ -81,14 +108,14 @@ const IconButton = styled.button<{ watched: boolean }>`
     background: #d63447;
     outline: none;
     border: none;
-    margin: 0 2.5px 5px 2.5px;
+    margin-right: 5px;
     display: ${props => (props.watched ? 'none' : 'block')};
     :focus, :hover {
         outline: none;
     }
 `;
 
-const SVG = styled.svg`
+const WatchIcon = styled.svg`
     fill: #fff9de;
     height: 20px;
     background: #d63447;
@@ -116,6 +143,7 @@ interface IFirebaseMovie {
     director: string;
     name: string;
     id: string;
+    bookmarked: boolean;
 }
 
 const Movie: React.FC<IMovie> = (
@@ -125,6 +153,7 @@ const Movie: React.FC<IMovie> = (
     const movieDataInitialState: IFirebaseMovie = {
         year: 999,
         watched: false,
+        bookmarked: false,
         director: '',
         name: '',
         id: ''
@@ -179,6 +208,19 @@ const Movie: React.FC<IMovie> = (
         });
     };
 
+    const toggleBookmark = () => {
+        let newMovieData = movieDataInState;
+        newMovieData.bookmarked = !movieDataInState.bookmarked;
+        fire.firestore().collection('movies').doc(movieDataInState.id).update({
+            ...newMovieData
+        }).then(() => {
+            console.log("Data updated successfully!");
+            setMovieDataInState(newMovieData);
+        }).catch(error => {
+            console.log(error.message);
+        });
+    };
+
     const onWatched = () => {
         setComfirmMode(true);
     };
@@ -189,35 +231,51 @@ const Movie: React.FC<IMovie> = (
 
     const watchedButton = (
         <IconButton watched={movieDataInState.watched} onClick={onWatched}>
-            <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
+            <WatchIcon aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
                  role="img"
                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"/>
-            </SVG>
+            </WatchIcon>
         </IconButton>
     );
 
     const confirmPanel = (
         <ConfirmRow>
             <IconButton watched={movieDataInState.watched} onClick={onConfirmWatched}>
-                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
+                <WatchIcon aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square"
                      role="img"
                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"/>
-                </SVG>
+                </WatchIcon>
             </IconButton>
             <IconButton watched={movieDataInState.watched} onClick={onAbort}>
-                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ban"
+                <WatchIcon aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ban"
                      role="img" xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 512 512">
                     <path d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"/>
-                </SVG>
+                </WatchIcon>
             </IconButton>
         </ConfirmRow>
     );
 
+    const addToBookmark = (
+        <BookmarkIcon watched={movieDataInState.watched} aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus-square"
+                      role="img" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512">
+            <path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-32 252c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92H92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"/>
+        </BookmarkIcon>
+    );
+
+    const removeFromBookmark = (
+        <BookmarkIcon watched={movieDataInState.watched} aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus-square"
+             role="img" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 448 512">
+            <path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM92 296c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h264c6.6 0 12 5.4 12 12v56c0 6.6-5.4 12-12 12H92z"/>
+        </BookmarkIcon>
+    );
+
     return (
-        <MovieWrapper watched={movieDataInState.watched}>
+        <MovieWrapper watched={movieDataInState.watched} bookmarked={movieDataInState.bookmarked}>
             <MovieButton
                 watched={movieDataInState.watched}
                 type={'button'}
@@ -245,7 +303,12 @@ const Movie: React.FC<IMovie> = (
                     </Information>
                 </InformationColumn>
             </MovieButton>
-            {confirmMode ? confirmPanel : watchedButton}
+            <SystemRow watched={movieDataInState.watched}>
+                {confirmMode ? confirmPanel : watchedButton}
+                <BookmarkButton watched={movieDataInState.watched} onClick={toggleBookmark}>
+                    {movieDataInState.bookmarked ? removeFromBookmark : addToBookmark}
+                </BookmarkButton>
+            </SystemRow>
         </MovieWrapper>
     );
 };
