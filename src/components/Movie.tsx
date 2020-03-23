@@ -26,10 +26,10 @@ const MovieButton = styled.button<{ watched: boolean }>`
     border: none;
     width: 100%;
     height: 100%;
-    padding: ${props => (props.watched ? '10px 10px 10px 10px' : '10px 10px 5px 10px')};
+    padding: 5px 5px 5px 5px;
     background: ${props => (props.watched ? '#527318' : '#d63447')};
     font-weight: 800;
-    font-size: 25px;
+    font-size: 20px;
     color: #FFFFFF;
     cursor: pointer;
     outline: none;
@@ -67,7 +67,7 @@ const Name = styled.span<{ opened: boolean }>`
     background: inherit;
     color: #fff9de;
     font-weight: 800;
-    font-size: 25px;
+    font-size: 20px;
     margin-bottom: ${props => (props.opened ? '10px' : '0')};
 `;
 
