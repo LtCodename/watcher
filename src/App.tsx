@@ -5,8 +5,10 @@ import { createGlobalStyle }  from "styled-components";
 import { useDispatch } from "react-redux";
 import DirectorsReducer from "./redux/DirectorsReducer";
 import MoviesReducer from "./redux/MoviesReducer";
-import Dashboard from "./components/Dashboard";
+import TabDirectors from "./components/TabDirectors";
 import Preloader from "./components/Preloader";
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Dashboard from "./components/Dashboard";
 
 export const OMDbApiKey: string = '36827e98';
 
@@ -57,9 +59,18 @@ function App() {
       <Preloader/>
   );
 
+  // @ts-ignore
+  const allContent = (
+      <Switch>
+        <Route exact path="/directors" component={TabDirectors}/>
+        <Route exact path="/dashboard" component={Dashboard}/>
+        <Redirect to="/dashboard"/>
+      </Switch>
+  );
+
   return (
       <>
-        {(directorsLoaded && moviesLoaded) ? <Dashboard directors={[]}/> : loader}
+        {(directorsLoaded && moviesLoaded) ? allContent : loader}
         <GlobalStyles/>
       </>
   );
