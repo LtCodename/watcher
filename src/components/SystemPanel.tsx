@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import { useDispatch } from "react-redux";
 import AddPanelReducer from "../redux/AddPanelReducer";
-import {NavLink} from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 
 const Wrapper = styled(Col)`
     background: #517217;
@@ -45,8 +45,17 @@ const HomeButton = styled(NavLink)`
     }
 `;
 
-const SystemPanel: React.FC = () => {
+const SystemPanel: React.FC = ({...otherProps}) => {
     const [panelState, setPanelState] = useState(false);
+    const [directorsPanel, setDirectorsPanel] = useState(false);
+
+    useEffect(() => {
+        // @ts-ignore
+        if (otherProps.location.pathname === '/directors') {
+            setDirectorsPanel(true);
+        }
+
+    },[otherProps]);
 
     const togglePanel = () => {
         dispatch({type: AddPanelReducer.actions.PANEL_CHANGE, newState: !panelState});
@@ -54,6 +63,18 @@ const SystemPanel: React.FC = () => {
     };
 
     const dispatch = useDispatch();
+
+    const addButton = (
+        <ActionButton onClick={togglePanel}>
+            <IconContainer>
+                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
+                     role="img" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 448 512">
+                    <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
+                </SVG>
+            </IconContainer>
+        </ActionButton>
+    );
 
     return (
         <Wrapper>
@@ -73,17 +94,9 @@ const SystemPanel: React.FC = () => {
                     </SVG>
                 </IconContainer>
             </ActionButton>
-            <ActionButton onClick={togglePanel}>
-                <IconContainer>
-                    <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
-                         role="img" xmlns="http://www.w3.org/2000/svg"
-                         viewBox="0 0 448 512">
-                        <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
-                    </SVG>
-                </IconContainer>
-            </ActionButton>
+            {directorsPanel ? addButton : ''}
         </Wrapper>
     );
 };
 
-export default SystemPanel;
+export default withRouter(SystemPanel);

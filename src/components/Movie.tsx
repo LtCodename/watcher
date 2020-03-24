@@ -162,7 +162,7 @@ const Movie: React.FC<IMovie> = (
     const [opened, setOpened] = useState(false);
     const [fullData, setFullData] = useState(fullDataInitialState);
     const [movieDataInState, setMovieDataInState] = useState(movieDataInitialState);
-    const [confirmMode, setComfirmMode] = useState(false);
+    const [confirmMode, setConfirmMode] = useState(false);
 
     useEffect(() => {
         setMovieDataInState(movieData);
@@ -222,11 +222,11 @@ const Movie: React.FC<IMovie> = (
     };
 
     const onWatched = () => {
-        setComfirmMode(true);
+        setConfirmMode(true);
     };
 
     const onAbort = () => {
-        setComfirmMode(false);
+        setConfirmMode(false);
     };
 
     const watchedButton = (

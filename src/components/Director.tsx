@@ -39,7 +39,6 @@ interface MyProps {
 interface MyState {
 }
 
-
 class Director extends React.Component <MyProps, MyState>  {
     constructor(props: any) {
         super(props);
@@ -47,7 +46,6 @@ class Director extends React.Component <MyProps, MyState>  {
         this.state = {
         };
     }
-
 
     render () {
         const moviesByDirector = this.props.movies.filter((elem:any) => {

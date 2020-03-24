@@ -9,6 +9,9 @@ import TabDirectors from "./components/TabDirectors";
 import Preloader from "./components/Preloader";
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Dashboard from "./components/Dashboard";
+import TabFilming from './components/TabFilming';
+import TabTheatres from "./components/TabTheatres";
+import FilmingReducer from './redux/FilmingReducer';
 
 export const OMDbApiKey: string = '36827e98';
 
@@ -25,6 +28,7 @@ const GlobalStyles = createGlobalStyle`
 function App() {
   const [directorsLoaded, setDirectorsLoaded] = useState(false);
   const [moviesLoaded, setMoviesLoaded] = useState(false);
+  const [filmingLoaded, setFilmingLoaded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -35,6 +39,7 @@ function App() {
   const fetchData = () => {
     fetchDirectors();
     fetchMovies();
+    fetchFilming();
   };
 
   const fetchDirectors = () => {
@@ -55,6 +60,15 @@ function App() {
     });
   };
 
+  const fetchFilming = () => {
+    fire.firestore().collection('filming').orderBy("year").onSnapshot((snapshot: any) => {
+      dispatch({type: FilmingReducer.actions.FILMING_FETCH, snapshot: snapshot});
+      setFilmingLoaded(true);
+    }, (error: { message: any; }) => {
+      console.log(error.message);
+    });
+  };
+
   const loader = (
       <Preloader/>
   );
@@ -64,13 +78,15 @@ function App() {
       <Switch>
         <Route exact path="/directors" component={TabDirectors}/>
         <Route exact path="/dashboard" component={Dashboard}/>
+        <Route exact path="/filming" component={TabFilming}/>
+        <Route exact path="/theatres" component={TabTheatres}/>
         <Redirect to="/dashboard"/>
       </Switch>
   );
 
   return (
       <>
-        {(directorsLoaded && moviesLoaded) ? allContent : loader}
+        {(directorsLoaded && moviesLoaded && filmingLoaded) ? allContent : loader}
         <GlobalStyles/>
       </>
   );
