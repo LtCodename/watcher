@@ -13,9 +13,9 @@ const Wrapper = styled(Col)`
 const ActionButton = styled.button`
     border: none;
     cursor: pointer;
-    padding: 11px 13px;
-    border-radius: 50%;
+    padding: 14px 13px;
     margin-bottom: 10px;
+    border-radius: 50%;
     transition: all .2s;
     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
     :hover {
@@ -32,12 +32,12 @@ const SVG = styled.svg`
 `;
 
 const IconContainer = styled(Row)`
-    align-items: center;
+    justify-content: center;
 `;
 
-const HomeButton = styled(NavLink)`
+const Link = styled(NavLink)`
+    padding: 14px 13px;
     margin-bottom: 10px;
-    padding: 10px;
     border-radius: 50%;
     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
     :hover {
@@ -78,14 +78,7 @@ const SystemPanel: React.FC = ({...otherProps}) => {
 
     return (
         <Wrapper>
-            <HomeButton to={"/dashboard"}>
-                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home"
-                     role="img" xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 576 512">
-                    <path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/>
-                </SVG>
-            </HomeButton>
-            <ActionButton>
+            <Link to={"/directors"}>
                 <IconContainer>
                     <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user"
                          role="img" xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +86,34 @@ const SystemPanel: React.FC = ({...otherProps}) => {
                         <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
                     </SVG>
                 </IconContainer>
-            </ActionButton>
+            </Link>
+            <Link to={"/filming"}>
+                <IconContainer>
+                    <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="video"
+                         role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 576 512">
+                        <path d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"/>
+                    </SVG>
+                </IconContainer>
+            </Link>
+            <Link to={"/theatres"}>
+                <IconContainer>
+                    <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ticket-alt"
+                         role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 576 512">
+                        <path d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"/>
+                    </SVG>
+                </IconContainer>
+            </Link>
+            <Link to={"/theatres"}>
+                <IconContainer>
+                    <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="key"
+                         role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 512 512">
+                        <path d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"/>
+                    </SVG>
+                </IconContainer>
+            </Link>
             {directorsPanel ? addButton : ''}
         </Wrapper>
     );

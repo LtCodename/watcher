@@ -8,7 +8,6 @@ import MoviesReducer from "./redux/MoviesReducer";
 import TabDirectors from "./components/TabDirectors";
 import Preloader from "./components/Preloader";
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Dashboard from "./components/Dashboard";
 import TabFilming from './components/TabFilming';
 import TabTheatres from "./components/TabTheatres";
 import FilmingReducer from './redux/FilmingReducer';
@@ -77,10 +76,9 @@ function App() {
   const allContent = (
       <Switch>
         <Route exact path="/directors" component={TabDirectors}/>
-        <Route exact path="/dashboard" component={Dashboard}/>
         <Route exact path="/filming" component={TabFilming}/>
         <Route exact path="/theatres" component={TabTheatres}/>
-        <Redirect to="/dashboard"/>
+        <Redirect to="/directors"/>
       </Switch>
   );
 
