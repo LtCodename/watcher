@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import { Col, Row } from "../Layout";
+import { Col, Row } from "./Layout";
 import { useDispatch } from "react-redux";
 import AddPanelReducer from "../redux/AddPanelReducer";
 import { NavLink, withRouter } from "react-router-dom";
@@ -12,37 +12,32 @@ const Wrapper = styled(Col)`
 
 const ActionButton = styled.button`
     border: none;
-    cursor: pointer;
-    padding: 14px 13px;
     margin-bottom: 10px;
-    border-radius: 50%;
-    transition: all .2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
-    :hover {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-    }
+    background: transparent;
+    cursor: pointer;
     :focus, :hover {
 		outline: none;
 	}
 `;
 
 const SVG = styled.svg`
-    height: 30px;
-    fill: #0079c5;
+    height: 45px;
+    fill: #fff9de;
+    background: transparent;
+    transition: all .2s;
+    :hover {
+        fill: #de7119;
+    }
 `;
 
 const IconContainer = styled(Row)`
     justify-content: center;
+    background: transparent;
 `;
 
 const Link = styled(NavLink)`
-    padding: 14px 13px;
     margin-bottom: 10px;
-    border-radius: 50%;
-    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
-    :hover {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-    }
+    background: transparent;
 `;
 
 const SystemPanel: React.FC = ({...otherProps}) => {

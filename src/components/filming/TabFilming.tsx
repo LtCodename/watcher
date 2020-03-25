@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { Col, Row } from '../Layout';
-import SystemPanel from "./SystemPanel";
+import SystemPanel from "../SystemPanel";
 import FilmingAddPanel from "./FilmingAddPanel";
 import { connect } from "react-redux";
 import FilmingMovie from "./FilmingMovie";

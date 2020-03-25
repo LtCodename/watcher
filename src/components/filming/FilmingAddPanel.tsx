@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
 import { Col, Row } from '../Layout';
-import FilmingBlueprint from "../blueprints/FilmingBlueprint";
+import FilmingBlueprint from "../../blueprints/FilmingBlueprint";
 import { useStore } from "react-redux";
-import fire from "../fire";
+import fire from "../../fire";
 
 const bg = '#512b58';
 

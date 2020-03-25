@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { Row } from '../Layout';
-import SystemPanel from "./SystemPanel";
+import SystemPanel from "../SystemPanel";
 
 const MainRow = styled(Row)`
     justify-content: space-between;

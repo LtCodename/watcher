@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import { Col } from "../Layout";
 import AdaptiveTextarea from "./AdaptiveTextarea";
-import fire from "../fire";
+import fire from "../../fire";
 import axios from "axios";
-import { OMDbApiKey } from "../App";
+import { OMDbApiKey } from "../../App";
 import SearchResults from "./SearchResults";
 
 const Wrapper = styled(Col)`

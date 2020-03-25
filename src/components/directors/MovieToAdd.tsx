@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
-import fire from "../fire";
+import fire from "../../fire";
 import { Col } from "../Layout";
 import axios from "axios";
-import { OMDbApiKey } from "../App";
+import { OMDbApiKey } from "../../App";
 import { IMovieData } from "./Movie";
 import { useStore } from "react-redux";
 

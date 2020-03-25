@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import Director from "./Director";
 import Movies from "./Movies";
-import SystemPanel from "./SystemPanel";
+import SystemPanel from "../SystemPanel";
 import AddPanel from "./AddPanel";
 
 const DashboardWrapper = styled(Col)`

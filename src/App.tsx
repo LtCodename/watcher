@@ -5,11 +5,11 @@ import { createGlobalStyle }  from "styled-components";
 import { useDispatch } from "react-redux";
 import DirectorsReducer from "./redux/DirectorsReducer";
 import MoviesReducer from "./redux/MoviesReducer";
-import TabDirectors from "./components/TabDirectors";
+import TabDirectors from "./components/directors/TabDirectors";
 import Preloader from "./components/Preloader";
 import { Switch, Route, Redirect } from 'react-router-dom';
-import TabFilming from './components/TabFilming';
-import TabTheatres from "./components/TabTheatres";
+import TabFilming from './components/filming/TabFilming';
+import TabTheatres from "./components/theaters/TabTheatres";
 import FilmingReducer from './redux/FilmingReducer';
 
 export const OMDbApiKey: string = '36827e98';

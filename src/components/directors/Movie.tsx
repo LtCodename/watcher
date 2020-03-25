@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import axios from 'axios';
-import { OMDbApiKey } from "../App";
-import fire from "../fire";
+import { OMDbApiKey } from "../../App";
+import fire from "../../fire";
 
 const MovieWrapper = styled(Col)<{ watched: boolean, bookmarked: boolean }>`
     margin-right: 10px;

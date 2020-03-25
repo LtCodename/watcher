@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { Col, Row } from "../Layout";
-import fire from "../fire";
+import fire from "../../fire";
 import { useStore } from "react-redux";
 
 const bg = '#de7119';

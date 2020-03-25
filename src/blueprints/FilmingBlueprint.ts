@@ -1,4 +1,4 @@
-import { IData } from "../components/FilmingAddPanel";
+import { IData } from "../components/filming/FilmingAddPanel";
 
 const FilmingBlueprint: IData[] = [
     {
