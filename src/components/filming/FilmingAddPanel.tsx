@@ -127,6 +127,8 @@ const FilmingAddPanel: React.FC = () => {
             director: movieData.director
         }).then(() => {
             setMovieData(initialState);
+        }).catch(error => {
+            console.log(error.message);
         });
     };
 

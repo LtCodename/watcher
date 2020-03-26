@@ -137,6 +137,8 @@ const FilmingMovie: React.FC<IMovie> = (
             }).catch(function(error) {
                 console.error("Error removing document: ", error);
             });
+        }).catch(error => {
+            console.log(error.message);
         });
     };
 

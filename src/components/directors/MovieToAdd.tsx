@@ -81,6 +81,8 @@ const MovieToAdd: React.FC<IProps> = (
                 year: parseInt(movieData['Year'])
             }).then(() => {
                 setProcess('Added!');
+            }).catch(error => {
+                console.log(error.message);
             });
         }
     };

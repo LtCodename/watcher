@@ -75,6 +75,8 @@ const AddPanel: React.FC = () => {
                 name: directorReference.state.textData
             }).then(() => {
                 setAddDirectorMode(!addDirectorMode);
+            }).catch(error => {
+                console.log(error.message);
             });
         }
     };
