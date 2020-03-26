@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import fire from "./fire";
 import { createGlobalStyle }  from "styled-components";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,8 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import TabFilming from './components/filming/TabFilming';
 import TabTheatres from "./components/theaters/TabTheatres";
 import FilmingReducer from './redux/FilmingReducer';
+import UserReducer from "./redux/UserReducer";
+import LoginPage from "./components/LoginPage";
 
 export const OMDbApiKey: string = '36827e98';
 
@@ -28,6 +30,7 @@ function App() {
   const [directorsLoaded, setDirectorsLoaded] = useState(false);
   const [moviesLoaded, setMoviesLoaded] = useState(false);
   const [filmingLoaded, setFilmingLoaded] = useState(false);
+  const [userLoaded, setUserLoaded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -36,9 +39,23 @@ function App() {
   },[]);
 
   const fetchData = () => {
+    fetchUser();
     fetchDirectors();
     fetchMovies();
     fetchFilming();
+  };
+
+  const fetchUser = () => {
+    fire.auth().onAuthStateChanged(user => {
+      if (user !== null) {
+        //console.log(user);
+        dispatch({type: UserReducer.actions.USER_FETCH, snapshot: user});
+        setUserLoaded(true);
+      }else {
+        //console.log(user);
+        setUserLoaded(true);
+      }
+    })
   };
 
   const fetchDirectors = () => {
@@ -78,13 +95,14 @@ function App() {
         <Route exact path="/directors" component={TabDirectors}/>
         <Route exact path="/filming" component={TabFilming}/>
         <Route exact path="/theatres" component={TabTheatres}/>
+        <Route exact path="/login" component={LoginPage}/>
         <Redirect to="/directors"/>
       </Switch>
   );
 
   return (
       <>
-        {(directorsLoaded && moviesLoaded && filmingLoaded) ? allContent : loader}
+        {(directorsLoaded && moviesLoaded && filmingLoaded && userLoaded) ? allContent : loader}
         <GlobalStyles/>
       </>
   );

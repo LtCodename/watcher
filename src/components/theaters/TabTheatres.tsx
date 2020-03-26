@@ -12,7 +12,7 @@ const TabTheatres: React.FC = () => {
     return (
         <MainRow>
             <Row>
-                <span>Theaters</span>
+                <span>In progress</span>
             </Row>
             <SystemPanel/>
         </MainRow>

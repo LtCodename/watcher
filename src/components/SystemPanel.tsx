@@ -100,7 +100,7 @@ const SystemPanel: React.FC = ({...otherProps}) => {
                     </SVG>
                 </IconContainer>
             </Link>
-            <Link to={"/theatres"}>
+            <Link to={"/login"}>
                 <IconContainer>
                     <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="key"
                          role="img" xmlns="http://www.w3.org/2000/svg"
