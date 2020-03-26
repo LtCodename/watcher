@@ -1,12 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import fire from "../fire";
 import { useDispatch, useStore } from "react-redux";
-import { Col } from "./Layout";
+import { Col, Row } from "./Layout";
 import UserReducer from "../redux/UserReducer";
+import SystemPanel from "./SystemPanel";
 
-const MainWrapper = styled(Col)`
+const MainRow = styled(Row)`
+    justify-content: space-between;
+    min-height: 100vh;
+`;
+
+const MainCol = styled(Col)`
+    padding: 10px;
+    width: 100%;
     align-items: center;
 `;
 
@@ -16,11 +24,20 @@ const InputWrapper = styled(Col)`
 
 const Label = styled.label`
     text-align: center;
-    color: #774d2b;
+    color: #512b58;
+    font-weight: 700;
     margin-bottom: 5px;
 `;
 
 const Input = styled.input`
+    border-bottom: 3px solid #512b58;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    outline: none;
+    ::-webkit-input-placeholder {
+        color: #512b58;
+    }
     margin-bottom: 10px;
 `;
 
@@ -28,26 +45,29 @@ const AuthPanel = styled(Col)`
     align-items: center;
 `;
 
-const LoginButton = styled.button`
-    margin: 0 0 10px 0;
+const Button = styled.button`
+    font-weight: 800;
+    font-size: 17px;
+    color: #512b58;
+    outline: none;
+    cursor: pointer;
+    border: 3px solid #512b58;
+    width: fit-content;
+    padding: 2px 4px
 `;
 
-const LogoutButton = styled.button`
-    margin: 0;
-`;
-
-const AdminInput = styled.input`
+/*const AdminInput = styled.input`
 `;
 
 const AdminCol = styled(Col)`
     align-items: center;
-`;
+`;*/
 
-const LoginPage = ({...otherProps}) => {
+const LoginPage = () => {
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [userData, setUserData] = useState('');
-    const [adminEmail, setAdminEmail] = useState('');
+    //const [adminEmail, setAdminEmail] = useState('');
 
     const store = useStore();
     const storeState = store.getState();
@@ -94,7 +114,7 @@ const LoginPage = ({...otherProps}) => {
     };
 
     const logoutButton = (
-        <LogoutButton onClick={onLogout}>Logout</LogoutButton>
+        <Button onClick={onLogout}>Logout</Button>
     );
 
     const authPanel = (
@@ -121,11 +141,11 @@ const LoginPage = ({...otherProps}) => {
                     value={userPassword}
                     onChange={inputValuesChange} required/>
             </InputWrapper>
-            <LoginButton onClick={onLogin}>Login</LoginButton>
+            <Button onClick={onLogin}>Login</Button>
         </AuthPanel>
     );
 
-    const adminValueChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    /*const adminValueChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setAdminEmail(event.target.value);
     };
 
@@ -150,18 +170,17 @@ const LoginPage = ({...otherProps}) => {
                 <button>Make Admin</button>
             </AdminCol>
         </form>
-    );
+    );*/
 
     return (
-        <>
-            <Col>
-                <MainWrapper>
-                    {makeAdmin}
-                    {userData.length === 0 ? authPanel : ""}
-                    {userData.length === 0 ? "" : logoutButton}
-                </MainWrapper>
-            </Col>
-        </>
+        <MainRow>
+            <MainCol>
+                {/*{makeAdmin}*/}
+                {userData.length === 0 ? authPanel : ""}
+                {userData.length === 0 ? "" : logoutButton}
+            </MainCol>
+            <SystemPanel/>
+        </MainRow>
     )
 };
 
