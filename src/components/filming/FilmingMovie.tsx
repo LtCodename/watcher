@@ -8,7 +8,7 @@ const bg = '#de7119';
 const textColor = '#512b58';
 
 const MovieWrapper = styled(Col)`
-    margin-right: 10px;
+    margin: 0 5px;
     margin-bottom: 10px;
     width: 200px;
     align-items: center;
@@ -21,6 +21,9 @@ const MovieWrapper = styled(Col)`
     :hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     }
+    @media (max-width: 414px) {
+        width: 187px;
+	}
 `;
 
 const MovieButton = styled.button`

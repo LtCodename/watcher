@@ -3,13 +3,18 @@ import { withRouter } from "react-router";
 import styled from "styled-components";
 import fire from "../fire";
 import { useDispatch, useStore } from "react-redux";
-import { Col, Row } from "./Layout";
+import { Col } from "./Layout";
 import UserReducer from "../redux/UserReducer";
 import SystemPanel from "./SystemPanel";
 
-const MainRow = styled(Row)`
+const MainRow = styled.div`
     justify-content: space-between;
     min-height: 100vh;
+    display: flex;
+    flex-flow: row;
+    @media (max-width: 414px) {
+        flex-flow: column;
+	}
 `;
 
 const MainCol = styled(Col)`

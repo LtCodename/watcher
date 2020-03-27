@@ -6,8 +6,7 @@ import { OMDbApiKey } from "../../App";
 import fire from "../../fire";
 
 const MovieWrapper = styled(Col)<{ watched: boolean, bookmarked: boolean }>`
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin: 0 5px 10px 5px;
     background: #15202b;
     border: ${props => ((!props.watched && props.bookmarked) ? '10px solid #84142d' : '0px solid #84142d')};
     width: 200px;
@@ -19,7 +18,10 @@ const MovieWrapper = styled(Col)<{ watched: boolean, bookmarked: boolean }>`
     :hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     }
-    
+    @media (max-width: 414px) {
+        font-size: 20px;
+        width: 160px;
+	}
 `;
 
 const MovieButton = styled.button<{ watched: boolean }>`

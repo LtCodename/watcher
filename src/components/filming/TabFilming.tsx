@@ -6,9 +6,14 @@ import FilmingAddPanel from "./FilmingAddPanel";
 import { connect } from "react-redux";
 import FilmingMovie from "./FilmingMovie";
 
-const MainRow = styled(Row)`
+const MainRow = styled.div`
     justify-content: space-between;
     min-height: 100vh;
+    display: flex;
+    flex-flow: row;
+    @media (max-width: 414px) {
+        flex-flow: column;
+	}
 `;
 
 const MainCol = styled(Col)`

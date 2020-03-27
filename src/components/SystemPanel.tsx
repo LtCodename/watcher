@@ -1,13 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import { Col, Row } from "./Layout";
+import { Row } from "./Layout";
 import { useDispatch } from "react-redux";
 import AddPanelReducer from "../redux/AddPanelReducer";
 import { NavLink, withRouter } from "react-router-dom";
 
-const Wrapper = styled(Col)`
+const Wrapper = styled.div`
     background: #517217;
     padding: 10px;
+    display: flex;
+    flex-flow: column;
+    @media (max-width: 414px) {
+        flex-flow: row;
+        width: 100%;
+        justify-content: space-evenly;
+        align-items: center;
+	}
 `;
 
 const ActionButton = styled.button`
@@ -21,7 +29,7 @@ const ActionButton = styled.button`
 `;
 
 const SVG = styled.svg`
-    height: 45px;
+    height: 30px;
     fill: #fff9de;
     background: transparent;
     transition: all .2s;
@@ -38,6 +46,9 @@ const IconContainer = styled(Row)`
 const Link = styled(NavLink)`
     margin-bottom: 10px;
     background: transparent;
+    @media (max-width: 414px) {
+        margin-bottom: 0;
+	}
 `;
 
 const SystemPanel: React.FC = ({...otherProps}) => {

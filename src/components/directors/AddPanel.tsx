@@ -11,6 +11,9 @@ const Wrapper = styled(Col)`
     background: #d63447;
     padding: 10px;
     width: 200px;
+    @media (max-width: 414px) {
+        width: 170px;
+	}
 `;
 
 const DirectorColumn = styled(Col)`

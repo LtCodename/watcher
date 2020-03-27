@@ -3,9 +3,14 @@ import styled from "styled-components";
 import { Row } from '../Layout';
 import SystemPanel from "../SystemPanel";
 
-const MainRow = styled(Row)`
+const MainRow = styled.div`
     justify-content: space-between;
     min-height: 100vh;
+    display: flex;
+    flex-flow: row;
+    @media (max-width: 414px) {
+        flex-flow: column;
+	}
 `;
 
 const TabTheatres: React.FC = () => {

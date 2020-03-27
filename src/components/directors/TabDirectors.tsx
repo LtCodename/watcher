@@ -7,12 +7,25 @@ import Movies from "./Movies";
 import SystemPanel from "../SystemPanel";
 import AddPanel from "./AddPanel";
 
+const MainRow = styled.div`
+    justify-content: space-between;
+    min-height: 100vh;
+    display: flex;
+    flex-flow: row;
+    @media (max-width: 414px) {
+        flex-flow: column;
+	}
+`;
+
 const DashboardWrapper = styled(Col)`
-    padding: 10px;
+    padding: 10px 5px;
 `;
 
 const DirectorsRow = styled(Row)`
     flex-wrap: wrap;
+    @media (max-width: 414px) {
+        justify-content: center;
+	}
 `;
 
 const DirectorButton = styled.button`
@@ -25,11 +38,6 @@ const DirectorButton = styled.button`
 
 const DirectorAndMovies = styled(Col)`
     align-items: center;
-`;
-
-const MainRow = styled(Row)`
-    justify-content: space-between;
-    min-height: 100vh;
 `;
 
 const MoviesWrapper = styled(Row)<{ stateDirector: string, director: string }>`
