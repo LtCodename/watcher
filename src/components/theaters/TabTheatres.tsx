@@ -5,6 +5,7 @@ import SystemPanel from "../SystemPanel";
 import MonthsBlueprint from "../../blueprints/MonthsBlueprint";
 import Month from "./Month";
 import {connect} from "react-redux";
+import TheatersAddPanel from "./TheatersAddPanel";
 
 const MainRow = styled.div`
     justify-content: space-between;
@@ -60,6 +61,7 @@ class TabTheatres extends React.Component <MyProps, MyState>  {
 
         return (
             <MainRow>
+                <TheatersAddPanel/>
                 <TheatersCol>
                     <MonthName>2020</MonthName>
                     <Months>
