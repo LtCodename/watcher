@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from "styled-components";
-import { Row } from '../Layout';
+import { Row, Col } from '../Layout';
 import SystemPanel from "../SystemPanel";
+import MonthsBlueprint from "../../blueprints/MonthsBlueprint";
+import Month from "./Month";
+import {connect} from "react-redux";
 
 const MainRow = styled.div`
     justify-content: space-between;
@@ -13,15 +16,68 @@ const MainRow = styled.div`
 	}
 `;
 
-const TabTheatres: React.FC = () => {
-    return (
-        <MainRow>
-            <Row>
-                <span>In progress</span>
-            </Row>
-            <SystemPanel/>
-        </MainRow>
-    );
+const TheatersCol = styled(Col)`
+    padding: 10px;
+    align-items: center;
+`;
+
+const Months = styled(Row)`
+    flex-wrap: wrap;
+`;
+
+const MonthName = styled.span`
+    padding: 5px;
+    margin-bottom: 5px;
+    color: #FFFFFF;
+    background: #3b6978;
+    font-size: 20px;
+    font-weight: 900;
+`;
+
+interface MyProps {
+    theaters: [];
+}
+
+interface MyState {
+}
+
+class TabTheatres extends React.Component <MyProps, MyState>  {
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+        };
+    }
+
+    render() {
+        const months = (
+            MonthsBlueprint.map((elem: any, index: number) => {
+                return (
+                    <Month key={index} month={elem.db} name={elem.name}/>
+                )
+            })
+        );
+
+        return (
+            <MainRow>
+                <TheatersCol>
+                    <MonthName>2020</MonthName>
+                    <Months>
+                        {months}
+                    </Months>
+                </TheatersCol>
+                <SystemPanel/>
+            </MainRow>
+        );
+    }
+}
+
+const stateToProps = (state: any = {}) => {
+    return {
+        theaters: state.theaters,
+    }
 };
 
-export default TabTheatres;
+const TabTheatresConnected = connect(stateToProps, null)(TabTheatres);
+
+export default TabTheatresConnected;

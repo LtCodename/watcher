@@ -1,20 +1,48 @@
 import React from 'react';
 import styled from "styled-components";
+import { useStore } from "react-redux";
+import { Col } from "../Layout";
+import TheatreMovie from "./TheatreMovie";
 
-const Div = styled.div`
+const MonthItem = styled(Col)`
+    text-align: center;
+    margin: 0 5px 5px 0;
+    width: 200px;
+`;
+
+const MonthName = styled.span`
+    color: #FFFFFF;
+    background: #3b6978;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 5px;
 `;
 
 interface IMonth {
     month: number;
+    name: string;
 }
 
 const Month: React.FC<IMonth> = (
-    { month },
+    { month, name },
 ) => {
+    const store = useStore();
+    const storeState = store.getState();
+    const theaters = storeState.theaters;
+
+    const movies = (
+        theaters.filter((elem: any) => elem.month === month).map((movie: any, index: number) => {
+            return (
+                <TheatreMovie key={index} movieData={movie}/>
+            )
+        })
+    );
 
     return (
-        <>
-        </>
+        <MonthItem>
+            <MonthName>{name}</MonthName>
+            {movies}
+        </MonthItem>
     );
 };
 

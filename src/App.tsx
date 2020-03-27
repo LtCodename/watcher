@@ -13,6 +13,7 @@ import TabTheatres from "./components/theaters/TabTheatres";
 import FilmingReducer from './redux/FilmingReducer';
 import UserReducer from "./redux/UserReducer";
 import LoginPage from "./components/LoginPage";
+import TheatersReducer from "./redux/TheatersReducer";
 
 export const OMDbApiKey: string = '36827e98';
 
@@ -31,6 +32,7 @@ function App() {
   const [moviesLoaded, setMoviesLoaded] = useState(false);
   const [filmingLoaded, setFilmingLoaded] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
+  const [theatersLoaded, setTheatersLoaded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -43,6 +45,7 @@ function App() {
     fetchDirectors();
     fetchMovies();
     fetchFilming();
+    fetchTheaters();
   };
 
   const fetchUser = () => {
@@ -85,6 +88,15 @@ function App() {
     });
   };
 
+  const fetchTheaters = () => {
+    fire.firestore().collection('theaters').orderBy("year").onSnapshot((snapshot: any) => {
+      dispatch({type: TheatersReducer.actions.THEATERS_FETCH, snapshot: snapshot});
+      setTheatersLoaded(true);
+    }, (error: { message: any; }) => {
+      console.log(error.message);
+    });
+  };
+
   const loader = (
       <Preloader/>
   );
@@ -102,7 +114,7 @@ function App() {
 
   return (
       <>
-        {(directorsLoaded && moviesLoaded && filmingLoaded && userLoaded) ? allContent : loader}
+        {(directorsLoaded && moviesLoaded && filmingLoaded && userLoaded && theatersLoaded) ? allContent : loader}
         <GlobalStyles/>
       </>
   );
