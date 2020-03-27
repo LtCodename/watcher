@@ -183,7 +183,7 @@ const Movie: React.FC<IMovie> = (
         let fromServer:IMovieData = {};
         try {
             const { data } = await axios.get(
-                `http://www.omdbapi.com/?t=${(movieDataInState.name).toLowerCase()}&y=${movieDataInState.year}&plot=full&apikey=${OMDbApiKey}`, {
+                `//www.omdbapi.com/?t=${(movieDataInState.name).toLowerCase()}&y=${movieDataInState.year}&plot=full&apikey=${OMDbApiKey}`, {
             });
             fromServer = {
                 year: data['Year'],

@@ -100,7 +100,7 @@ const MovieToAdd: React.FC<IProps> = (
         let fromServer:IMovieData = {};
         try {
             const { data } = await axios.get(
-                `http://www.omdbapi.com/?t=${(movieData['Title']).toLowerCase()}&y=${movieData['Year']}&plot=full&apikey=${OMDbApiKey}`, {
+                `//www.omdbapi.com/?t=${(movieData['Title']).toLowerCase()}&y=${movieData['Year']}&plot=full&apikey=${OMDbApiKey}`, {
                 });
             fromServer = {
                 director: data['Director'],

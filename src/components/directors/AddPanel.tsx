@@ -101,7 +101,7 @@ const AddPanel: React.FC = () => {
         let fromServer:IResponse;
         try {
             const { data } = await axios.get(
-                `http://www.omdbapi.com/?s=${(movieReference.state.textData).toLowerCase()}&type=movie&apikey=${OMDbApiKey}`, {
+                `//www.omdbapi.com/?s=${(movieReference.state.textData).toLowerCase()}&type=movie&apikey=${OMDbApiKey}`, {
                 });
             fromServer = data;
             //console.log(data);
