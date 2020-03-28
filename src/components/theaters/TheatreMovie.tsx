@@ -141,6 +141,7 @@ export interface IMovieData {
 interface IFirebaseMovie {
     name: string;
     year: number;
+    releaseYear: number;
     month: number;
     priority: boolean;
     id: string
@@ -154,6 +155,7 @@ const TheatreMovie: React.FC<IMovie> = (
     const movieDataInitialState: IFirebaseMovie = {
         year: 999,
         month: 999,
+        releaseYear: 999,
         watched: false,
         priority: false,
         name: '',
@@ -182,7 +184,7 @@ const TheatreMovie: React.FC<IMovie> = (
         let fromServer:IMovieData = {};
         try {
             const { data } = await axios.get(
-                `//www.omdbapi.com/?t=${(movieDataInState.name).toLowerCase()}&y=${movieDataInState.year}&plot=full&apikey=${OMDbApiKey}`, {
+                `//www.omdbapi.com/?t=${(movieDataInState.name).toLowerCase()}&y=${movieDataInState.releaseYear}&plot=full&apikey=${OMDbApiKey}`, {
                 });
             fromServer = {
                 year: data['Year'],
@@ -199,7 +201,7 @@ const TheatreMovie: React.FC<IMovie> = (
     const onConfirmWatched = () => {
         let newMovieData = movieDataInState;
         newMovieData.watched = true;
-        fire.firestore().collection('movies').doc(movieDataInState.id).update({
+        fire.firestore().collection('theaters').doc(movieDataInState.id).update({
             ...newMovieData
         }).then(() => {
             console.log("Data updated successfully!");

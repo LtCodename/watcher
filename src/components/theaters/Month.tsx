@@ -20,18 +20,19 @@ const MonthName = styled.span`
 
 interface IMonth {
     month: number;
+    year: number;
     name: string;
 }
 
 const Month: React.FC<IMonth> = (
-    { month, name },
+    { month, name, year },
 ) => {
     const store = useStore();
     const storeState = store.getState();
     const theaters = storeState.theaters;
 
     const movies = (
-        theaters.filter((elem: any) => elem.month === month).map((movie: any, index: number) => {
+        theaters.filter((elem: any) => (elem.month === month && elem.year === year)).map((movie: any, index: number) => {
             return (
                 <TheatreMovie key={index} movieData={movie}/>
             )

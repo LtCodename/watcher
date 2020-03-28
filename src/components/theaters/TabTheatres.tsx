@@ -22,6 +22,10 @@ const TheatersCol = styled(Col)`
     align-items: center;
 `;
 
+const Year = styled(Col)`
+    margin-bottom: 10px;
+`;
+
 const Months = styled(Row)`
     flex-wrap: wrap;
 `;
@@ -30,9 +34,10 @@ const MonthName = styled.span`
     padding: 5px;
     margin-bottom: 5px;
     color: #FFFFFF;
-    background: #3b6978;
+    background: #de7119;
     font-size: 20px;
     font-weight: 900;
+    width: -webkit-fill-available;
 `;
 
 interface MyProps {
@@ -51,10 +56,26 @@ class TabTheatres extends React.Component <MyProps, MyState>  {
     }
 
     render() {
-        const months = (
+        const months2019 = (
             MonthsBlueprint.map((elem: any, index: number) => {
                 return (
-                    <Month key={index} month={elem.db} name={elem.name}/>
+                    <Month key={index} year={2019} month={elem.db} name={elem.name}/>
+                )
+            })
+        );
+
+        const months2020 = (
+            MonthsBlueprint.map((elem: any, index: number) => {
+                return (
+                    <Month key={index} year={2020} month={elem.db} name={elem.name}/>
+                )
+            })
+        );
+
+        const months2021 = (
+            MonthsBlueprint.map((elem: any, index: number) => {
+                return (
+                    <Month key={index} year={2021} month={elem.db} name={elem.name}/>
                 )
             })
         );
@@ -63,10 +84,24 @@ class TabTheatres extends React.Component <MyProps, MyState>  {
             <MainRow>
                 <TheatersAddPanel/>
                 <TheatersCol>
-                    <MonthName>2020</MonthName>
-                    <Months>
-                        {months}
-                    </Months>
+                    <Year>
+                        <MonthName>2019</MonthName>
+                        <Months>
+                            {months2019}
+                        </Months>
+                    </Year>
+                   <Year>
+                       <MonthName>2020</MonthName>
+                       <Months>
+                           {months2020}
+                       </Months>
+                   </Year>
+                    <Year>
+                        <MonthName>2021</MonthName>
+                        <Months>
+                            {months2021}
+                        </Months>
+                    </Year>
                 </TheatersCol>
                 <SystemPanel/>
             </MainRow>

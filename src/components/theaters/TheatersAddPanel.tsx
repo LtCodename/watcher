@@ -8,6 +8,7 @@ const bg = '#512b58';
 
 interface IMovie {
     year: string;
+    releaseYear: string;
     name: string;
     month: string;
     watched: boolean;
@@ -74,6 +75,7 @@ const TheatersAddPanel: React.FC = () => {
     const initialState: IMovie = {
         month: '',
         year: '',
+        releaseYear: '',
         name: '',
         watched: false,
         priority: false
@@ -102,12 +104,23 @@ const TheatersAddPanel: React.FC = () => {
                 </Textarea>
             </InputRow>
             <InputRow>
-                <Label htmlFor={'year'}>{'Year'}</Label>
+                <Label htmlFor={'year'}>{'Watched'}</Label>
                 <Textarea
                     placeholder=''
                     rows={1}
                     id={'year'}
                     value={movieData['year']}
+                    onChange={inputValuesChange}
+                    required>
+                </Textarea>
+            </InputRow>
+            <InputRow>
+                <Label htmlFor={'releaseYear'}>{'Release'}</Label>
+                <Textarea
+                    placeholder=''
+                    rows={1}
+                    id={'releaseYear'}
+                    value={movieData['releaseYear']}
                     onChange={inputValuesChange}
                     required>
                 </Textarea>
