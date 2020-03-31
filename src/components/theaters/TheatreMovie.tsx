@@ -51,6 +51,19 @@ const BookmarkButton = styled.button<{ watched: boolean }>`
 	}
 `;
 
+const EditButton = styled.button<{ watched: boolean }>`
+    border: none;
+    cursor: pointer;
+    outline: none;
+    margin-left: 5px;
+    top: 0;
+    right: 0;
+    background: ${props => (props.watched ? '#527318' : '#d63447')};
+    :focus, :hover {
+		outline: none;
+	}
+`;
+
 const BookmarkIcon = styled.svg<{ watched: boolean }>`
     fill: #fff9de;
     height: 20px;
@@ -166,6 +179,7 @@ const TheatreMovie: React.FC<IMovie> = (
     const [fullData, setFullData] = useState(fullDataInitialState);
     const [movieDataInState, setMovieDataInState] = useState(movieDataInitialState);
     const [confirmMode, setConfirmMode] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         setMovieDataInState(movieData);
@@ -224,6 +238,10 @@ const TheatreMovie: React.FC<IMovie> = (
         });
     };
 
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+    };
+
     const onWatched = () => {
         setConfirmMode(true);
     };
@@ -277,40 +295,62 @@ const TheatreMovie: React.FC<IMovie> = (
         </BookmarkIcon>
     );
 
+    const editIcon = (
+        <BookmarkIcon watched={movieDataInState.watched} aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen-square"
+             role="img" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 448 512">
+            <path d="M400 480H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h352c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zM238.1 177.9L102.4 313.6l-6.3 57.1c-.8 7.6 5.6 14.1 13.3 13.3l57.1-6.3L302.2 242c2.3-2.3 2.3-6.1 0-8.5L246.7 178c-2.5-2.4-6.3-2.4-8.6-.1zM345 165.1L314.9 135c-9.4-9.4-24.6-9.4-33.9 0l-23.1 23.1c-2.3 2.3-2.3 6.1 0 8.5l55.5 55.5c2.3 2.3 6.1 2.3 8.5 0L345 199c9.3-9.3 9.3-24.5 0-33.9z"/>
+        </BookmarkIcon>
+    );
+
+    const allData = (
+        <InformationColumn>
+            <Name opened={opened}>{movieDataInState.name}</Name>
+            <Information
+                opened={opened}>
+                <Info>
+                    <InfoTitle>Year: </InfoTitle>
+                    <InfoBody>{fullData.year}</InfoBody>
+                </Info>
+                <Info>
+                    <InfoTitle>Awards: </InfoTitle>
+                    <InfoBody>{fullData.awards}</InfoBody>
+                </Info>
+                <Info>
+                    <InfoTitle>Metascore: </InfoTitle>
+                    <InfoBody>{fullData.metascore}</InfoBody>
+                </Info>
+                <Info>
+                    <InfoTitle>IMDB Rating: </InfoTitle>
+                    <InfoBody>{fullData.imdbRating}</InfoBody>
+                </Info>
+            </Information>
+        </InformationColumn>
+    );
+
+    const editModeData = (
+        <InformationColumn>
+            <span>Edit Mode</span>
+            <button onClick={toggleEditMode}>Okay</button>
+        </InformationColumn>
+    );
+
     return (
         <MovieWrapper watched={movieDataInState.watched} bookmarked={movieDataInState.priority}>
             <MovieButton
                 watched={movieDataInState.watched}
                 type={'button'}
                 onClick={onMovie}>
-                <InformationColumn>
-                    <Name opened={opened}>{movieDataInState.name}</Name>
-                    <Information
-                        opened={opened}>
-                        <Info>
-                            <InfoTitle>Year: </InfoTitle>
-                            <InfoBody>{fullData.year}</InfoBody>
-                        </Info>
-                        <Info>
-                            <InfoTitle>Awards: </InfoTitle>
-                            <InfoBody>{fullData.awards}</InfoBody>
-                        </Info>
-                        <Info>
-                            <InfoTitle>Metascore: </InfoTitle>
-                            <InfoBody>{fullData.metascore}</InfoBody>
-                        </Info>
-                        <Info>
-                            <InfoTitle>IMDB Rating: </InfoTitle>
-                            <InfoBody>{fullData.imdbRating}</InfoBody>
-                        </Info>
-                    </Information>
-                </InformationColumn>
+                {editMode ? editModeData : allData}
             </MovieButton>
             <SystemRow watched={movieDataInState.watched}>
                 {confirmMode ? confirmPanel : watchedButton}
                 <BookmarkButton watched={movieDataInState.watched} onClick={toggleBookmark}>
                     {movieDataInState.priority ? removeFromBookmark : addToBookmark}
                 </BookmarkButton>
+                <EditButton watched={movieDataInState.watched} onClick={toggleEditMode}>
+                    {editIcon}
+                </EditButton>
             </SystemRow>
         </MovieWrapper>
     );
