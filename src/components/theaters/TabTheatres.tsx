@@ -28,6 +28,9 @@ const Year = styled(Col)`
 
 const Months = styled(Row)`
     flex-wrap: wrap;
+    @media (max-width: 414px) {
+        justify-content: center;
+	}
 `;
 
 const MonthName = styled.span`

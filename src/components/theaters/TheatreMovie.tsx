@@ -159,6 +159,9 @@ const Select = styled.select`
     :focus, :hover {
 		outline: none;
 	}
+    @media (max-width: 414px) {
+        width: 150px;
+	}
 `;
 
 const Textarea = styled.textarea`
@@ -170,6 +173,9 @@ const Textarea = styled.textarea`
     ::-webkit-input-placeholder {
         color: #512b58;
     }
+    @media (max-width: 414px) {
+        width: 150px;
+	}
 `;
 
 const SubmitButton = styled.button`

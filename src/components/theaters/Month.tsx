@@ -8,6 +8,10 @@ const MonthItem = styled(Col)`
     text-align: center;
     margin: 0 5px 5px 0;
     width: 200px;
+    @media (max-width: 414px) {
+        width: auto;
+        min-width: 160px;
+	}
 `;
 
 const MonthName = styled.span`
