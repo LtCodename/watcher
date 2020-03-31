@@ -4,6 +4,7 @@ import { Col, Row } from "../Layout";
 import axios from 'axios';
 import { OMDbApiKey } from "../../App";
 import fire from "../../fire";
+import MonthsBlueprint from "../../blueprints/MonthsBlueprint";
 
 const MovieWrapper = styled(Col)<{ watched: boolean, bookmarked: boolean }>`
     margin: 5px 0 0 0;
@@ -90,6 +91,13 @@ const InformationColumn = styled(Col)`
     color: inherit;
 `;
 
+const EditColumn = styled(Col)`
+    background: inherit;
+    color: inherit;
+    margin: 10px 0px 2px;
+    align-items: center;
+`;
+
 const Information = styled(Col)<{ opened: boolean }>`
     display: ${props => (props.opened ? 'flex' : 'none')};
     padding: 5px;
@@ -139,6 +147,43 @@ const ConfirmRow = styled(Row)`
     background: #d63447;
 `;
 
+const InputRow = styled(Row)`
+    align-items: center;
+    margin-bottom: 5px;
+    justify-content: space-between;
+`;
+
+const Select = styled.select`
+    width: 165px;
+    border: none;
+    :focus, :hover {
+		outline: none;
+	}
+`;
+
+const Textarea = styled.textarea`
+    resize: none;
+    border: none;
+    outline: none;
+    width: 165px;
+    padding: 5px;
+    ::-webkit-input-placeholder {
+        color: #512b58;
+    }
+`;
+
+const SubmitButton = styled.button`
+    cursor: pointer;
+    width: fit-content;
+    outline: none;
+    background: inherit;
+    border: none;
+    margin-top: 6px;
+    :focus, :hover {
+        outline: none;
+    }
+`;
+
 interface IMovie {
     movieData: any;
 }
@@ -180,6 +225,7 @@ const TheatreMovie: React.FC<IMovie> = (
     const [movieDataInState, setMovieDataInState] = useState(movieDataInitialState);
     const [confirmMode, setConfirmMode] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    //const [newMovieData, setNewMovieData] = useState(movieDataInitialState);
 
     useEffect(() => {
         setMovieDataInState(movieData);
@@ -304,45 +350,113 @@ const TheatreMovie: React.FC<IMovie> = (
     );
 
     const allData = (
-        <InformationColumn>
-            <Name opened={opened}>{movieDataInState.name}</Name>
-            <Information
-                opened={opened}>
-                <Info>
-                    <InfoTitle>Year: </InfoTitle>
-                    <InfoBody>{fullData.year}</InfoBody>
-                </Info>
-                <Info>
-                    <InfoTitle>Awards: </InfoTitle>
-                    <InfoBody>{fullData.awards}</InfoBody>
-                </Info>
-                <Info>
-                    <InfoTitle>Metascore: </InfoTitle>
-                    <InfoBody>{fullData.metascore}</InfoBody>
-                </Info>
-                <Info>
-                    <InfoTitle>IMDB Rating: </InfoTitle>
-                    <InfoBody>{fullData.imdbRating}</InfoBody>
-                </Info>
-            </Information>
-        </InformationColumn>
+        <MovieButton
+            watched={movieDataInState.watched}
+            type={'button'}
+            onClick={onMovie}>
+            <InformationColumn>
+                <Name opened={opened}>{movieDataInState.name}</Name>
+                <Information
+                    opened={opened}>
+                    <Info>
+                        <InfoTitle>Year: </InfoTitle>
+                        <InfoBody>{fullData.year}</InfoBody>
+                    </Info>
+                    <Info>
+                        <InfoTitle>Awards: </InfoTitle>
+                        <InfoBody>{fullData.awards}</InfoBody>
+                    </Info>
+                    <Info>
+                        <InfoTitle>Metascore: </InfoTitle>
+                        <InfoBody>{fullData.metascore}</InfoBody>
+                    </Info>
+                    <Info>
+                        <InfoTitle>IMDB Rating: </InfoTitle>
+                        <InfoBody>{fullData.imdbRating}</InfoBody>
+                    </Info>
+                </Information>
+            </InformationColumn>
+        </MovieButton>
+
+    );
+
+    const submitNewData = () => {
+        setEditMode(!editMode);
+        fire.firestore().collection('theaters').doc(movieDataInState.id).update({
+            ...movieDataInState,
+        }).then(() => {
+            console.log("Data updated successfully!");
+        }).catch(error => {
+            console.log(error.message);
+        });
+    };
+
+    const inputValuesChange = (event: { target: { id: any; value: any; }; }) => {
+        if (event.target.id !== 'name') {
+            setMovieDataInState({
+                ...movieDataInState,
+                [event.target.id]: parseInt(event.target.value)
+            });
+        } else {
+            setMovieDataInState({
+                ...movieDataInState,
+                [event.target.id]: event.target.value
+            });
+        }
+    };
+
+    const monthOptions = [{name: "Not selected", value: undefined}, ...MonthsBlueprint].map((dir: any, index) => {
+        return (
+            <option key={index} value={dir.db}>{dir.name}</option>
+        );
+    });
+
+    const monthSelect = (
+        <Select
+            value={movieDataInState['month']}
+            id={'month'}
+            onChange={inputValuesChange}>
+            {monthOptions}
+        </Select>
     );
 
     const editModeData = (
-        <InformationColumn>
-            <span>Edit Mode</span>
-            <button onClick={toggleEditMode}>Okay</button>
-        </InformationColumn>
+        <EditColumn>
+            <InputRow>
+                <Textarea
+                    placeholder=''
+                    rows={1}
+                    id={'name'}
+                    value={movieDataInState['name']}
+                    onChange={inputValuesChange}
+                    required>
+                </Textarea>
+            </InputRow>
+            <InputRow>
+                <Textarea
+                    placeholder=''
+                    rows={1}
+                    id={'year'}
+                    value={movieDataInState['year']}
+                    onChange={inputValuesChange}
+                    required>
+                </Textarea>
+            </InputRow>
+            {monthSelect}
+            <SubmitButton onClick={submitNewData}>
+                <BookmarkIcon watched={movieDataInState.watched} aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-double"
+                     role="img" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512">
+                    <path d="M505 174.8l-39.6-39.6c-9.4-9.4-24.6-9.4-33.9 0L192 374.7 80.6 263.2c-9.4-9.4-24.6-9.4-33.9 0L7 302.9c-9.4 9.4-9.4 24.6 0 34L175 505c9.4 9.4 24.6 9.4 33.9 0l296-296.2c9.4-9.5 9.4-24.7.1-34zm-324.3 106c6.2 6.3 16.4 6.3 22.6 0l208-208.2c6.2-6.3 6.2-16.4 0-22.6L366.1 4.7c-6.2-6.3-16.4-6.3-22.6 0L192 156.2l-55.4-55.5c-6.2-6.3-16.4-6.3-22.6 0L68.7 146c-6.2 6.3-6.2 16.4 0 22.6l112 112.2z"/>
+                </BookmarkIcon>
+            </SubmitButton>
+        </EditColumn>
     );
 
     return (
         <MovieWrapper watched={movieDataInState.watched} bookmarked={movieDataInState.priority}>
-            <MovieButton
-                watched={movieDataInState.watched}
-                type={'button'}
-                onClick={onMovie}>
-                {editMode ? editModeData : allData}
-            </MovieButton>
+
+            {editMode ? editModeData : allData}
             <SystemRow watched={movieDataInState.watched}>
                 {confirmMode ? confirmPanel : watchedButton}
                 <BookmarkButton watched={movieDataInState.watched} onClick={toggleBookmark}>

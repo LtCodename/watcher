@@ -37,17 +37,6 @@ const Label = styled.label`
     margin-right: 10px;
 `;
 
-const SubmitButton = styled.button`
-    font-weight: 800;
-    font-size: 17px;
-    color: #512b58;
-    outline: none;
-    cursor: pointer;
-    border: 3px solid #512b58;
-    width: fit-content;
-    padding: 2px 4px
-`;
-
 const Textarea = styled.textarea`
     resize: none;
     border-bottom: 3px solid #512b58;
@@ -59,6 +48,17 @@ const Textarea = styled.textarea`
     ::-webkit-input-placeholder {
         color: #512b58;
     }
+`;
+
+const SubmitButton = styled.button`
+    font-weight: 800;
+    font-size: 17px;
+    color: #512b58;
+    outline: none;
+    cursor: pointer;
+    border: 3px solid #512b58;
+    width: fit-content;
+    padding: 2px 4px
 `;
 
 const ButtonRow = styled(Row)`
