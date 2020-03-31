@@ -14,6 +14,7 @@ import FilmingReducer from './redux/FilmingReducer';
 import UserReducer from "./redux/UserReducer";
 import LoginPage from "./components/LoginPage";
 import TheatersReducer from "./redux/TheatersReducer";
+import TabOscars from "./components/oscars/TabOscars";
 
 export const OMDbApiKey: string = '36827e98';
 
@@ -107,6 +108,7 @@ function App() {
         <Route exact path="/directors" component={TabDirectors}/>
         <Route exact path="/filming" component={TabFilming}/>
         <Route exact path="/theatres" component={TabTheatres}/>
+        <Route exact path="/oscars" component={TabOscars}/>
         <Route exact path="/login" component={LoginPage}/>
         <Redirect to="/directors"/>
       </Switch>
