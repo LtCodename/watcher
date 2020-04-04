@@ -15,6 +15,8 @@ import UserReducer from "./redux/UserReducer";
 import LoginPage from "./components/LoginPage";
 import TheatersReducer from "./redux/TheatersReducer";
 import TabOscars from "./components/oscars/TabOscars";
+import OscarYearsReducer from "./redux/OscarYearsReducer";
+import OscarMoviesReducer from "./redux/OscarMoviesReducer";
 
 export const OMDbApiKey: string = '36827e98';
 
@@ -34,6 +36,8 @@ function App() {
   const [filmingLoaded, setFilmingLoaded] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
   const [theatersLoaded, setTheatersLoaded] = useState(false);
+  const [oscarYearsLoaded, setOscarYearsLoaded] = useState(false);
+  const [oscarMoviesLoaded, setOscarMoviesLoaded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -47,6 +51,8 @@ function App() {
     fetchMovies();
     fetchFilming();
     fetchTheaters();
+    fetchOscarYears();
+    fetchOscarMovies();
   };
 
   const fetchUser = () => {
@@ -98,11 +104,28 @@ function App() {
     });
   };
 
+  const fetchOscarYears = () => {
+    fire.firestore().collection('oscarYears').orderBy("name").onSnapshot((snapshot: any) => {
+      dispatch({type: OscarYearsReducer.actions.YEARS_FETCH, snapshot: snapshot});
+      setOscarYearsLoaded(true);
+    }, (error: { message: any; }) => {
+      console.log(error.message);
+    });
+  };
+
+  const fetchOscarMovies = () => {
+    fire.firestore().collection('oscarMovies').orderBy("name").onSnapshot((snapshot: any) => {
+      dispatch({type: OscarMoviesReducer.actions.OSCAR_MOVIES_FETCH, snapshot: snapshot});
+      setOscarMoviesLoaded(true);
+    }, (error: { message: any; }) => {
+      console.log(error.message);
+    });
+  };
+
   const loader = (
       <Preloader/>
   );
 
-  // @ts-ignore
   const allContent = (
       <Switch>
         <Route exact path="/directors" component={TabDirectors}/>
@@ -116,7 +139,13 @@ function App() {
 
   return (
       <>
-        {(directorsLoaded && moviesLoaded && filmingLoaded && userLoaded && theatersLoaded) ? allContent : loader}
+        {(directorsLoaded
+            && moviesLoaded
+            && filmingLoaded
+            && userLoaded
+            && theatersLoaded
+            && oscarMoviesLoaded
+            && oscarYearsLoaded) ? allContent : loader}
         <GlobalStyles/>
       </>
   );

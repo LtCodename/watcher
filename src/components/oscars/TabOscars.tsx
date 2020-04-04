@@ -28,7 +28,8 @@ const TempCol = styled(Col)`
 `;
 
 interface MyProps {
-    oscars: [];
+    years: [];
+    movies: [];
 }
 
 interface MyState {
@@ -56,7 +57,8 @@ class TabOscars extends React.Component <MyProps, MyState>  {
 
 const stateToProps = (state: any = {}) => {
     return {
-        oscars: state.theaters,
+        years: state.oscarYears,
+        movies: state.oscarMovies
     }
 };
 
