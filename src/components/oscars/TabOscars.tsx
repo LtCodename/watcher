@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from "styled-components";
-import { Col } from '../Layout';
+import { Col, Row } from '../Layout';
 import SystemPanel from "../SystemPanel";
 import { connect } from "react-redux";
+import Year from "./Year";
+import OscarMovies from "./OscarMovies";
 
 const MainRow = styled.div`
     justify-content: space-between;
@@ -14,17 +16,32 @@ const MainRow = styled.div`
 	}
 `;
 
-const Sign = styled.span`
-    font-weight: 800;
-    font-size: 17px;
-    color: #512b58;
+const DashboardWrapper = styled(Col)`
+    padding: 10px 5px;
 `;
 
-const TempCol = styled(Col)`
-    width: 100%;
-    height: 100vh;
-    justify-content: center;
+const YearsRow = styled(Row)`
+    flex-wrap: wrap;
+    @media (max-width: 414px) {
+        justify-content: center;
+	}
+`;
+
+const AllMoviesColumn = styled(Col)`
     align-items: center;
+`;
+
+const YearButton = styled.button`
+    border: none;
+    cursor: pointer;
+    :focus, :hover {
+		outline: none;
+	}
+`;
+
+const MoviesWrapper = styled(Row)<{ stateYear: string, year: string }>`
+    color: #FFFFFF;
+    display: ${props => (props.year === props.stateYear ? 'block' : 'none')};
 `;
 
 interface MyProps {
@@ -33,6 +50,7 @@ interface MyProps {
 }
 
 interface MyState {
+    currentYear: string;
 }
 
 class TabOscars extends React.Component <MyProps, MyState>  {
@@ -40,16 +58,52 @@ class TabOscars extends React.Component <MyProps, MyState>  {
         super(props);
 
         this.state = {
+            currentYear: '',
         };
     }
 
+    onYear = (name: string) => {
+        if (name === this.state.currentYear)
+        {
+            this.setState({
+                currentYear: ''
+            });
+        } else {
+            this.setState({
+                currentYear: name
+            });
+        }
+    };
+
     render() {
+        const yearsNode = this.props.years.map((elem: any, index: any) => {
+            return (
+                <AllMoviesColumn key={index}>
+                    <YearButton
+                        type={'button'}
+                        onClick={() => this.onYear(elem.name)}>
+                        <Year yearData={elem} movies={[]}/>
+                    </YearButton>
+                    <MoviesWrapper
+                        year={elem.name}
+                        stateYear={this.state.currentYear}>
+                        <OscarMovies yearId={elem.id} movies={[]}/>
+                    </MoviesWrapper>
+                </AllMoviesColumn>
+            )
+        });
+
         return (
             <MainRow>
-                <TempCol>
-                    <Sign>Under Construction</Sign>
-                </TempCol>
-                <SystemPanel/>
+                <DashboardWrapper>
+                    <YearsRow>
+                        {yearsNode}
+                    </YearsRow>
+                </DashboardWrapper>
+                <Row>
+                    {/*{this.props.oscarsAddPanelState ? <DirectorsTabAddPanel/> : ''}*/}
+                    <SystemPanel/>
+                </Row>
             </MainRow>
         );
     }

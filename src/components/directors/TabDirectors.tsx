@@ -5,7 +5,7 @@ import { Col, Row } from "../Layout";
 import Director from "./Director";
 import Movies from "./Movies";
 import SystemPanel from "../SystemPanel";
-import AddPanel from "./AddPanel";
+import DirectorsTabAddPanel from "./DirectorsTabAddPanel";
 
 const MainRow = styled.div`
     justify-content: space-between;
@@ -104,7 +104,7 @@ class TabDirectors extends React.Component <MyProps, MyState>  {
                     </DirectorsRow>
                 </DashboardWrapper>
                 <Row>
-                    {this.props.addPanelState ? <AddPanel/> : ''}
+                    {this.props.addPanelState ? <DirectorsTabAddPanel/> : ''}
                     <SystemPanel/>
                 </Row>
             </MainRow>

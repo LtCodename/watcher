@@ -42,7 +42,7 @@ interface IResponse {
     Search: [];
 }
 
-const AddPanel: React.FC = () => {
+const DirectorsTabAddPanel: React.FC = () => {
     const [addDirectorMode, setAddDirectorMode] = useState(false);
     const [addMovieMode, setAddMovieMode] = useState(false);
     const [foundMovies, setFoundMovies] = useState([]);
@@ -139,4 +139,4 @@ const AddPanel: React.FC = () => {
     );
 };
 
-export default AddPanel;
+export default DirectorsTabAddPanel;
