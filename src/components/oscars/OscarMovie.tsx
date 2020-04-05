@@ -5,18 +5,18 @@ import axios from 'axios';
 import { OMDbApiKey } from "../../App";
 import fire from "../../fire";
 
-const MovieWrapper = styled(Col)<{ watched: boolean }>`
-    margin: 0 5px 10px 5px;
-    background: #15202b;
-    border: ${props => (!props.watched ? '10px solid #84142d' : '0px solid #84142d')};
+const MovieWrapper = styled(Col)<{ watched: boolean, reduced: boolean }>`
+    margin: ${props => (props.reduced ? '0' : '5px 0 0 0')};
     width: 200px;
+    min-height: ${props => (props.reduced ? '60px' : 0)};
     align-items: center;
     text-align: center;
+    justify-content: center;
     background: ${props => (props.watched ? '#527318' : '#d63447')};
     transition: all .2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+    box-shadow: ${props => (props.reduced ? 'none' : '0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24)')};
     :hover {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        box-shadow: ${props => (props.reduced ? 'none' : '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)')};
     }
     @media (max-width: 414px) {
         font-size: 20px;
@@ -111,6 +111,7 @@ const ConfirmRow = styled(Row)`
 
 interface IMovie {
     movieData: any;
+    reduced: boolean;
 }
 
 export interface IMovieData {
@@ -130,7 +131,7 @@ interface IFirebaseMovie {
 }
 
 const OscarMovie: React.FC<IMovie> = (
-    { movieData },
+    { movieData, reduced },
 ) => {
     const fullDataInitialState: IMovieData = {};
     const movieDataInitialState: IFirebaseMovie = {
@@ -180,7 +181,7 @@ const OscarMovie: React.FC<IMovie> = (
     const onConfirmWatched = () => {
         let newMovieData = movieDataInState;
         newMovieData.watched = true;
-        fire.firestore().collection('movies').doc(movieDataInState.id).update({
+        fire.firestore().collection('oscarMovies').doc(movieDataInState.id).update({
             ...newMovieData
         }).then(() => {
             console.log("Data updated successfully!");
@@ -228,7 +229,7 @@ const OscarMovie: React.FC<IMovie> = (
     );
 
     return (
-        <MovieWrapper watched={movieDataInState.watched}>
+        <MovieWrapper watched={movieDataInState.watched} reduced={reduced}>
             <MovieButton
                 watched={movieDataInState.watched}
                 type={'button'}

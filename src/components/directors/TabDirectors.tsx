@@ -31,6 +31,7 @@ const DirectorsRow = styled(Row)`
 const DirectorButton = styled.button`
     border: none;
     cursor: pointer;
+    background: #fff9de;
     :focus, :hover {
 		outline: none;
 	}

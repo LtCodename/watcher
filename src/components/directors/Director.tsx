@@ -28,7 +28,7 @@ const DirectorWrapper = styled(Col)`
 `;
 
 const Percent = styled.span`
-    color: #0079c4;
+    color: #fff9de;
     font-size: 25px;
     font-weight: 900;
     width: fit-content;

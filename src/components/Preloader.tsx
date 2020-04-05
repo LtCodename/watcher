@@ -7,6 +7,7 @@ const LoaderWrapper = styled.div`
     height: 100%;
     justify-content: space-around;
     align-items: center;
+    background: #fff9de;
     position: relative;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 `;

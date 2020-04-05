@@ -1,21 +1,20 @@
 import React from 'react';
 import styled from "styled-components";
-import { Col } from "../Layout";
+import { Col, Row } from "../Layout";
 import { connect } from "react-redux";
+import OscarMovie from "./OscarMovie";
+import OscarMovies from "./OscarMovies";
 
-const DirectorWrapper = styled(Col)`
+const YearWrapper = styled(Col)`
+    margin-right: 10px;
     padding: 10px;
-    margin: 0 5px;
-    margin-bottom: 10px;
-    color: #fff9de;;
-    background: #0079c5;
     font-weight: 800;
     font-size: 25px;
-    width: 200px;
-    min-height: 125px;
+    background: rgba(81, 43, 88, 0.5);
     transition: all .2s;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
     :hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -27,16 +26,43 @@ const DirectorWrapper = styled(Col)`
 	}
 `;
 
-const Percent = styled.span`
-    color: #0079c4;
-    font-size: 25px;
-    font-weight: 900;
-    width: fit-content;
+const UpperPart = styled(Col)`
+    transition: all .2s;
+    background: transparent;
+`;
+
+const NomineesButton = styled.button<{ percentage: number }>`
+    color: #FFFFFF;
+    background: ${props => (props.percentage === 100 ? '#527318' : '#d63447')};
+    font-size: 20px;
+    width: 100%;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
     padding: 5px;
     margin-top: 5px;
+    :focus, :hover {
+		outline: none;
+	}
     @media (max-width: 414px) {
         font-size: 20px;
 	}
+`;
+
+const MoviesWrapper = styled(Row)<{ opened: boolean }>`
+    color: #FFFFFF;
+    display: ${props => (props.opened ? 'block' : 'none')};
+    background: transparent;
+`;
+
+const YearName = styled.span`
+    color: #FFFFFF;
+    background: #de7119;
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 5px;
 `;
 
 interface MyProps {
@@ -45,6 +71,7 @@ interface MyProps {
 }
 
 interface MyState {
+    opened: boolean;
 }
 
 class Year extends React.Component <MyProps, MyState>  {
@@ -52,22 +79,61 @@ class Year extends React.Component <MyProps, MyState>  {
         super(props);
 
         this.state = {
+            opened: false,
         };
     }
 
+    onNominees = () => {
+        if (this.state.opened)
+        {
+            this.setState({
+                opened: false
+            });
+        } else {
+            this.setState({
+                opened: true
+            });
+        }
+    };
+
     render () {
-        const moviesByDirector = this.props.movies.filter((elem:any) => {
-            return elem.director === this.props.yearData.id;
+        const moviesByYear = this.props.movies.filter((elem:any) => {
+            return (elem.year === this.props.yearData.id);
         });
-        const watched = moviesByDirector.filter((elem:any) => elem.watched);
-        const percentage = ((watched.length * 100) / moviesByDirector.length) || 0;
+
+        const nominees = moviesByYear.filter((elem:any) => {
+            return (!elem.best);
+        });
+
+        const bestPicture = moviesByYear.find((elem:any) => {
+            return (elem.best);
+        });
+
+        const watched = nominees.filter((elem:any) => elem.watched);
+        const percentage = ((watched.length * 100) / nominees.length) || 0;
         const percentageRounded = Number(Math.round(percentage));
 
+        const bestMovie = (
+            <OscarMovie reduced={true} movieData={bestPicture}/>
+        );
+
         return (
-            <DirectorWrapper>
-                {this.props.yearData.name}
-                <Percent>{`${percentageRounded}%`}</Percent>
-            </DirectorWrapper>
+            <YearWrapper>
+                <UpperPart>
+                    <YearName>{this.props.yearData.name}</YearName>
+                    {bestMovie}
+                    <NomineesButton
+                        percentage={percentageRounded}
+                        type={'button'}
+                        onClick={this.onNominees}>
+                        {`Nominees: ${percentageRounded}%`}
+                    </NomineesButton>
+                </UpperPart>
+                <MoviesWrapper
+                    opened={this.state.opened}>
+                    <OscarMovies yearId={this.props.yearData.id} movies={[]}/>
+                </MoviesWrapper>
+            </YearWrapper>
         );
     }
 }

@@ -22,6 +22,7 @@ const MainCol = styled(Col)`
 
 const SecondaryCol = styled(Col)`
     padding: 10px;
+    background: #fff9de;
 `;
 
 const InputRow = styled(Row)`
@@ -44,6 +45,7 @@ const Textarea = styled.textarea`
     border-left: none;
     border-right: none;
     outline: none;
+    background: #fff9de;
     width: 200px;
     ::-webkit-input-placeholder {
         color: #512b58;

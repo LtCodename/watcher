@@ -23,9 +23,11 @@ export const OMDbApiKey: string = '36827e98';
 const GlobalStyles = createGlobalStyle`
   * {
     padding: 0;
-    margin: 0;
     box-sizing: border-box;
     font-size: 16px;
+  }
+  
+  body {
     background: #fff9de;
   }
 `;

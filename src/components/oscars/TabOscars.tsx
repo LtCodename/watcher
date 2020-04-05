@@ -4,7 +4,6 @@ import { Col, Row } from '../Layout';
 import SystemPanel from "../SystemPanel";
 import { connect } from "react-redux";
 import Year from "./Year";
-import OscarMovies from "./OscarMovies";
 
 const MainRow = styled.div`
     justify-content: space-between;
@@ -31,17 +30,7 @@ const AllMoviesColumn = styled(Col)`
     align-items: center;
 `;
 
-const YearButton = styled.button`
-    border: none;
-    cursor: pointer;
-    :focus, :hover {
-		outline: none;
-	}
-`;
-
-const MoviesWrapper = styled(Row)<{ stateYear: string, year: string }>`
-    color: #FFFFFF;
-    display: ${props => (props.year === props.stateYear ? 'block' : 'none')};
+const YearContainer = styled.div`
 `;
 
 interface MyProps {
@@ -50,7 +39,6 @@ interface MyProps {
 }
 
 interface MyState {
-    currentYear: string;
 }
 
 class TabOscars extends React.Component <MyProps, MyState>  {
@@ -58,37 +46,24 @@ class TabOscars extends React.Component <MyProps, MyState>  {
         super(props);
 
         this.state = {
-            currentYear: '',
         };
     }
 
-    onYear = (name: string) => {
-        if (name === this.state.currentYear)
-        {
-            this.setState({
-                currentYear: ''
-            });
-        } else {
-            this.setState({
-                currentYear: name
-            });
-        }
-    };
-
     render() {
-        const yearsNode = this.props.years.map((elem: any, index: any) => {
+        const yearsNode = this.props.years.sort((a:any, b: any) => {
+            if (a.name < b.name) {
+                return 1;
+            }
+            if (a.name > b.name) {
+                return -1;
+            }
+            return 0;
+        }).map((elem: any, index: any) => {
             return (
                 <AllMoviesColumn key={index}>
-                    <YearButton
-                        type={'button'}
-                        onClick={() => this.onYear(elem.name)}>
+                    <YearContainer>
                         <Year yearData={elem} movies={[]}/>
-                    </YearButton>
-                    <MoviesWrapper
-                        year={elem.name}
-                        stateYear={this.state.currentYear}>
-                        <OscarMovies yearId={elem.id} movies={[]}/>
-                    </MoviesWrapper>
+                    </YearContainer>
                 </AllMoviesColumn>
             )
         });
