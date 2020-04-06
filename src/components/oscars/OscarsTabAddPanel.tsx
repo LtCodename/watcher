@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import { Col } from "../Layout";
-import AdaptiveTextarea from "./AdaptiveTextarea";
 import fire from "../../fire";
 import axios from "axios";
 import { OMDbApiKey } from "../../App";
-import SearchResults from "./SearchResults";
+import AdaptiveTextarea from "../directors/AdaptiveTextarea";
+import OscarSearchResults from './OscarsSearchResults';
 
 const Wrapper = styled(Col)`
     background: #d63447;
@@ -27,8 +27,8 @@ const ActionButton = styled.button`
     font-weight: 800;
     color: #0079c4;
     font-size: 18px;
-    margin-bottom: 10px;
     background: #fff9de;
+    margin-bottom: 10px;
     transition: all .2s;
     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
     :hover {
@@ -43,7 +43,7 @@ interface IResponse {
     Search: [];
 }
 
-const DirectorsTabAddPanel: React.FC = () => {
+const OscarsTabAddPanel: React.FC = () => {
     const [addDirectorMode, setAddDirectorMode] = useState(false);
     const [addMovieMode, setAddMovieMode] = useState(false);
     const [foundMovies, setFoundMovies] = useState([]);
@@ -59,7 +59,7 @@ const DirectorsTabAddPanel: React.FC = () => {
     const addMenu = (
         <>
             <ActionButton onClick={onAddDirector} type={'button'}>
-                Add Director
+                Add Year
             </ActionButton>
             <ActionButton onClick={onAddMovie}  type={'button'}>
                 Add Movie
@@ -70,12 +70,12 @@ const DirectorsTabAddPanel: React.FC = () => {
     let directorReference: any;
     let movieReference: any;
 
-    const submitDirector = () => {
+    const submitYear = () => {
         if (directorReference.state.textData === '') {
             setAddDirectorMode(!addDirectorMode);
             return;
         } else {
-            fire.firestore().collection('directors').add({
+            fire.firestore().collection('oscarYears').add({
                 name: directorReference.state.textData
             }).then(() => {
                 setAddDirectorMode(!addDirectorMode);
@@ -115,12 +115,12 @@ const DirectorsTabAddPanel: React.FC = () => {
     const addDirector = (
         <DirectorColumn>
             <AdaptiveTextarea ref={c => (directorReference = c)}/>
-            <ActionButton type={'button'} onClick={submitDirector}>Submit</ActionButton>
+            <ActionButton type={'button'} onClick={submitYear}>Submit</ActionButton>
         </DirectorColumn>
     );
 
     const movies = (
-        <SearchResults searchData={foundMovies}/>
+        <OscarSearchResults searchData={foundMovies}/>
     );
 
     const addMovie = (
@@ -140,4 +140,4 @@ const DirectorsTabAddPanel: React.FC = () => {
     );
 };
 
-export default DirectorsTabAddPanel;
+export default OscarsTabAddPanel;

@@ -4,6 +4,7 @@ import { Row } from "./Layout";
 import { useDispatch } from "react-redux";
 import AddPanelReducer from "../redux/AddPanelReducer";
 import { NavLink, withRouter } from "react-router-dom";
+import OscarsAddPanelReducer from "../redux/OscarsAddPanelReducer";
 
 const Wrapper = styled.div`
     background: #517217;
@@ -55,23 +56,47 @@ const SystemPanel: React.FC = ({...otherProps}) => {
     const [panelState, setPanelState] = useState(false);
     const [directorsPanel, setDirectorsPanel] = useState(false);
 
+    const [oscarsPanelState, setOscarsPanelState] = useState(false);
+    const [oscarsPanel, setOscarsPanel] = useState(false);
+
     useEffect(() => {
         // @ts-ignore
         if (otherProps.location.pathname === '/directors') {
             setDirectorsPanel(true);
         }
+        // @ts-ignore
+        if (otherProps.location.pathname === '/oscars') {
+            setOscarsPanel(true);
+        }
 
     },[otherProps]);
 
-    const togglePanel = () => {
+    const toggleDirectorsPanel = () => {
         dispatch({type: AddPanelReducer.actions.PANEL_CHANGE, newState: !panelState});
         setPanelState(!panelState);
+    };
+
+    const toggleOscarsPanel = () => {
+        dispatch({type: OscarsAddPanelReducer.actions.OSCARS_PANEL_CHANGE, newState: !oscarsPanelState});
+        setOscarsPanelState(!oscarsPanelState);
     };
 
     const dispatch = useDispatch();
 
     const addButton = (
-        <ActionButton onClick={togglePanel}>
+        <ActionButton onClick={toggleDirectorsPanel}>
+            <IconContainer>
+                <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
+                     role="img" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 448 512">
+                    <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
+                </SVG>
+            </IconContainer>
+        </ActionButton>
+    );
+
+    const oscarsAddButton = (
+        <ActionButton onClick={toggleOscarsPanel}>
             <IconContainer>
                 <SVG aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
                      role="img" xmlns="http://www.w3.org/2000/svg"
@@ -130,6 +155,7 @@ const SystemPanel: React.FC = ({...otherProps}) => {
                 </IconContainer>
             </Link>
             {directorsPanel ? addButton : ''}
+            {oscarsPanel ? oscarsAddButton : ''}
         </Wrapper>
     );
 };

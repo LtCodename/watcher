@@ -4,6 +4,7 @@ import { Col, Row } from '../Layout';
 import SystemPanel from "../SystemPanel";
 import { connect } from "react-redux";
 import Year from "./Year";
+import OscarsTabAddPanel from "./OscarsTabAddPanel";
 
 const MainRow = styled.div`
     justify-content: space-between;
@@ -36,6 +37,7 @@ const YearContainer = styled.div`
 interface MyProps {
     years: [];
     movies: [];
+    panelState: boolean;
 }
 
 interface MyState {
@@ -76,7 +78,7 @@ class TabOscars extends React.Component <MyProps, MyState>  {
                     </YearsRow>
                 </DashboardWrapper>
                 <Row>
-                    {/*{this.props.oscarsAddPanelState ? <DirectorsTabAddPanel/> : ''}*/}
+                    {this.props.panelState ? <OscarsTabAddPanel/> : ''}
                     <SystemPanel/>
                 </Row>
             </MainRow>
@@ -87,7 +89,8 @@ class TabOscars extends React.Component <MyProps, MyState>  {
 const stateToProps = (state: any = {}) => {
     return {
         years: state.oscarYears,
-        movies: state.oscarMovies
+        movies: state.oscarMovies,
+        panelState: state.oscarsAddPanelState
     }
 };
 

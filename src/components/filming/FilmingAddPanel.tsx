@@ -49,7 +49,7 @@ const SubmitButton = styled.button`
     cursor: pointer;
     border: 3px solid #512b58;
     width: fit-content;
-    padding: 2px 4px
+    padding: 2px 4px;
 `;
 
 const Textarea = styled.textarea`

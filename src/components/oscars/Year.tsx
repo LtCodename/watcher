@@ -16,9 +16,6 @@ const YearWrapper = styled(Col)`
     align-items: center;
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
-    :hover {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-    }
     @media (max-width: 414px) {
         padding: 5px;
         font-size: 20px;
@@ -29,6 +26,7 @@ const YearWrapper = styled(Col)`
 const UpperPart = styled(Col)`
     transition: all .2s;
     background: transparent;
+    width: 200px;
 `;
 
 const NomineesButton = styled.button<{ percentage: number }>`
@@ -41,6 +39,7 @@ const NomineesButton = styled.button<{ percentage: number }>`
     cursor: pointer;
     padding: 5px;
     margin-top: 5px;
+    color: #fff9de;
     :focus, :hover {
 		outline: none;
 	}
@@ -56,7 +55,7 @@ const MoviesWrapper = styled(Row)<{ opened: boolean }>`
 `;
 
 const YearName = styled.span`
-    color: #FFFFFF;
+    color: #fff9de;
     background: #de7119;
     font-size: 20px;
     width: 100%;
@@ -117,21 +116,25 @@ class Year extends React.Component <MyProps, MyState>  {
             <OscarMovie reduced={true} movieData={bestPicture}/>
         );
 
+        const nomineesNode = (
+            <OscarMovies yearId={this.props.yearData.id} movies={[]}/>
+        );
+
         return (
             <YearWrapper>
                 <UpperPart>
                     <YearName>{this.props.yearData.name}</YearName>
-                    {bestMovie}
+                    {moviesByYear.length ? bestMovie : ''}
                     <NomineesButton
                         percentage={percentageRounded}
                         type={'button'}
                         onClick={this.onNominees}>
-                        {`Nominees: ${percentageRounded}%`}
+                        {`${percentageRounded}%`}
                     </NomineesButton>
                 </UpperPart>
                 <MoviesWrapper
                     opened={this.state.opened}>
-                    <OscarMovies yearId={this.props.yearData.id} movies={[]}/>
+                    {moviesByYear.length ? nomineesNode : ''}
                 </MoviesWrapper>
             </YearWrapper>
         );

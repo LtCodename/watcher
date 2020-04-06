@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
-import fire from "../../fire";
 import { Col } from "../Layout";
 import axios from "axios";
 import { OMDbApiKey } from "../../App";
-import { IMovieData } from "./Movie";
-import { useStore } from "react-redux";
+import { IMovieData } from "../directors/Movie";
+import MiniAddPanel from "./MiniAddPanel";
 
 const MovieButton = styled.button`
     border: none;
@@ -19,11 +18,6 @@ const MovieButton = styled.button`
     :focus, :hover {
 		outline: none;
 	}
-`;
-
-const InfoSpan = styled.span`
-    color: #517217;
-    font-weight: 700;
 `;
 
 const MovieDetail = styled.span`
@@ -40,53 +34,21 @@ interface IData {
     Year: string
 }
 
-const MovieToAdd: React.FC<IProps> = (
+const OscarMovieToAdd: React.FC<IProps> = (
     { movieData },
 ) => {
-    const store = useStore();
-    const storeState = store.getState();
-    const directors = storeState.directors;
-    const movies = storeState.movies;
 
     const initialDirector: any = '';
-    const [process, setProcess] = useState('unset');
     const [directorInState, setDirectorInState] = useState(initialDirector);
+    const [addMode, setAddMode] = useState(false);
+
+    const onMovieClick = () => {
+        setAddMode(true);
+    };
 
     useEffect(() => {
         getAdditionalData();
     },[movieData]);
-
-    const onMovieClick = () => {
-        const directorFound = directors.find((elem: any) => elem.name === directorInState);
-
-        if (!directorFound) {
-            setProcess('Director Not Found');
-            setTimeout(() => { setProcess('unset'); }, 3000);
-            return;
-        }
-
-        const movieFound = movies.find((elem: any) => elem.name === movieData['Title']);
-
-        if (movieFound) {
-            setProcess('Movie Exists');
-            setTimeout(() => { setProcess('unset'); }, 3000);
-            return;
-        }
-
-        if (directorFound && !movieFound) {
-            setProcess('Progress...');
-            fire.firestore().collection('movies').add({
-                director: directorFound.id,
-                name: movieData['Title'],
-                watched: false,
-                year: parseInt(movieData['Year'])
-            }).then(() => {
-                setProcess('Added!');
-            }).catch(error => {
-                console.log(error.message);
-            });
-        }
-    };
 
     const getAdditionalData = () => {
         getData().then((response:IMovieData) => {
@@ -111,15 +73,25 @@ const MovieToAdd: React.FC<IProps> = (
         return fromServer;
     }
 
-    return (
+    const movie = (
         <MovieButton onClick={onMovieClick}>
             <Col>
-                <MovieDetail>{process !== 'unset' ? <InfoSpan>{process}</InfoSpan> : movieData['Title']}</MovieDetail>
+                <MovieDetail>{movieData['Title']}</MovieDetail>
                 <MovieDetail>{movieData['Year']}</MovieDetail>
                 <MovieDetail>{directorInState ? directorInState : 'Searching...'}</MovieDetail>
             </Col>
         </MovieButton>
     );
+
+    const addPanel = (
+        <MiniAddPanel movieData={movieData}/>
+    );
+
+    return (
+        <>
+            {addMode ? addPanel : movie}
+        </>
+    );
 };
 
-export default MovieToAdd;
+export default OscarMovieToAdd;

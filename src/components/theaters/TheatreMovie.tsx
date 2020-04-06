@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import axios from 'axios';
@@ -231,7 +231,6 @@ const TheatreMovie: React.FC<IMovie> = (
     const [movieDataInState, setMovieDataInState] = useState(movieDataInitialState);
     const [confirmMode, setConfirmMode] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    //const [newMovieData, setNewMovieData] = useState(movieDataInitialState);
 
     useEffect(() => {
         setMovieDataInState(movieData);
@@ -254,6 +253,7 @@ const TheatreMovie: React.FC<IMovie> = (
                 });
             fromServer = {
                 year: data['Year'],
+                director: data['Director'],
                 awards: data['Awards'],
                 metascore: data['Metascore'],
                 imdbRating: data['imdbRating']
@@ -367,6 +367,10 @@ const TheatreMovie: React.FC<IMovie> = (
                     <Info>
                         <InfoTitle>Year: </InfoTitle>
                         <InfoBody>{fullData.year}</InfoBody>
+                    </Info>
+                    <Info>
+                        <InfoTitle>Director: </InfoTitle>
+                        <InfoBody>{fullData.director}</InfoBody>
                     </Info>
                     <Info>
                         <InfoTitle>Awards: </InfoTitle>

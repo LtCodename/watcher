@@ -8,7 +8,7 @@ import fire from "../../fire";
 const MovieWrapper = styled(Col)<{ watched: boolean, reduced: boolean }>`
     margin: ${props => (props.reduced ? '0' : '5px 0 0 0')};
     width: 200px;
-    min-height: ${props => (props.reduced ? '60px' : 0)};
+    min-height: ${props => (props.reduced ? '81px' : 0)};
     align-items: center;
     text-align: center;
     justify-content: center;
@@ -166,9 +166,11 @@ const OscarMovie: React.FC<IMovie> = (
             const { data } = await axios.get(
                 `//www.omdbapi.com/?t=${(movieDataInState.name).toLowerCase()}&y=${movieDataInState.year}&plot=full&apikey=${OMDbApiKey}`, {
                 });
+            console.log(data);
             fromServer = {
                 year: data['Year'],
                 awards: data['Awards'],
+                director: data['Director'],
                 metascore: data['Metascore'],
                 imdbRating: data['imdbRating']
             };
@@ -241,6 +243,10 @@ const OscarMovie: React.FC<IMovie> = (
                         <Info>
                             <InfoTitle>Year: </InfoTitle>
                             <InfoBody>{fullData.year}</InfoBody>
+                        </Info>
+                        <Info>
+                            <InfoTitle>Director: </InfoTitle>
+                            <InfoBody>{fullData.director}</InfoBody>
                         </Info>
                         <Info>
                             <InfoTitle>Awards: </InfoTitle>

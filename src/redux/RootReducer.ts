@@ -7,11 +7,13 @@ import UserReducer from "./UserReducer";
 import TheatersReducer from "./TheatersReducer";
 import OscarYearsReducer from "./OscarYearsReducer";
 import OscarMoviesReducer from "./OscarMoviesReducer";
+import OscarsAddPanelReducer from "./OscarsAddPanelReducer";
 
 const RootReducer = combineReducers({
     directors: DirectorsReducer.reducer,
     movies: MoviesReducer.reducer,
     addPanelState: AddPanelReducer.reducer,
+    oscarsAddPanelState: OscarsAddPanelReducer.reducer,
     filming: FilmingReducer.reducer,
     user: UserReducer.reducer,
     theaters: TheatersReducer.reducer,
