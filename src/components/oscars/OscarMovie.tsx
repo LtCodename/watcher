@@ -8,7 +8,6 @@ import fire from "../../fire";
 const MovieWrapper = styled(Col)<{ watched: boolean, reduced: boolean }>`
     margin: ${props => (props.reduced ? '0' : '5px 0 0 0')};
     width: 200px;
-    min-height: ${props => (props.reduced ? '81px' : 0)};
     align-items: center;
     text-align: center;
     justify-content: center;
