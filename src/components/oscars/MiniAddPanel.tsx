@@ -104,7 +104,15 @@ const MiniAddPanel: React.FC<IData> = (
         }
     };
 
-    const yearOptions = [{name: "Not selected", value: undefined}, ...years].map((year, index) => {
+    const yearOptions = [{name: "Not selected", value: undefined}, ...years].sort((a:any, b: any) => {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (a.name > b.name) {
+            return 1;
+        }
+        return 0;
+    }).map((year, index) => {
         return (
             <option key={index} value={year.id}>{year.name}</option>
         );

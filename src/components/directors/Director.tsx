@@ -32,7 +32,6 @@ const Percent = styled.span`
     font-size: 25px;
     font-weight: 900;
     width: fit-content;
-    padding: 5px;
     margin-top: 5px;
     @media (max-width: 414px) {
         font-size: 20px;
