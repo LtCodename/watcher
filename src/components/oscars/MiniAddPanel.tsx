@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Col, Row } from "../Layout";
 import { useStore } from "react-redux";
@@ -62,8 +62,8 @@ interface IData {
 }
 
 interface IMovie {
-    best: boolean,
-    watched: boolean,
+    best: string,
+    watched: string,
     name: string,
     year: string
 }
@@ -72,8 +72,8 @@ const MiniAddPanel: React.FC<IData> = (
     { movieData },
 ) => {
     const initialState: IMovie = {
-        best: false,
-        watched: false,
+        best: 'No',
+        watched: 'No',
         name: movieData['Title'],
         year: '',
     };
@@ -86,22 +86,18 @@ const MiniAddPanel: React.FC<IData> = (
     const years = storeState.oscarYears;
     const movies = storeState.oscarMovies;
 
+    useEffect(() => {
+        setMovieInformation({
+            ...movieInformation,
+            year: years.find((elem: any) => (elem.name === movieData['Year'])).id
+        })
+    },[movieData]);
+
     const inputValuesChange = (event: { target: { id: any; value: any; }; }) => {
-        if (event.target.id === 'year') {
-            setMovieInformation({
-                ...movieInformation,
-                [event.target.id]: event.target.value
-            });
-        } else {
-            let value: boolean;
-
-            value = event.target.value === 'Yes';
-
-            setMovieInformation({
-                ...movieInformation,
-                [event.target.id]: value
-            });
-        }
+        setMovieInformation({
+            ...movieInformation,
+            [event.target.id]: event.target.value
+        });
     };
 
     const yearOptions = [{name: "Not selected", value: undefined}, ...years].sort((a:any, b: any) => {
@@ -120,7 +116,7 @@ const MiniAddPanel: React.FC<IData> = (
 
     const yearSelect = (
         <Select
-            value={movieData['year']}
+            value={movieInformation.year}
             id={'year'}
             onChange={inputValuesChange}>
             {yearOptions}
@@ -142,7 +138,7 @@ const MiniAddPanel: React.FC<IData> = (
 
     const watchedSelect = (
         <Select
-            value={movieData['watched']}
+            value={movieInformation.watched}
             id={'watched'}
             onChange={inputValuesChange}>
             {options}
@@ -158,7 +154,7 @@ const MiniAddPanel: React.FC<IData> = (
 
     const bestSelect = (
         <Select
-            value={movieData['best']}
+            value={movieInformation.best}
             id={'best'}
             onChange={inputValuesChange}>
             {options}
@@ -189,8 +185,23 @@ const MiniAddPanel: React.FC<IData> = (
 
         setProcess('Progress...');
 
+        let watched: boolean = false;
+        let best: boolean = false;
+        if (movieInformation.watched === 'Yes') {
+            watched = true;
+        }
+        if (movieInformation.best === 'Yes') {
+            best = true;
+        }
+
+        const serverData = {
+            ...movieInformation,
+            best,
+            watched
+        };
+
         fire.firestore().collection('oscarMovies').add({
-            ...movieInformation
+            ...serverData
         }).then(() => {
             setProcess('Added!');
         }).catch(error => {
